@@ -1,0 +1,274 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+/* ─── 8-bit Pixel Character (developer at desk) ─── */
+export function PixelDeveloper({ className = "" }: { className?: string }) {
+  return (
+    <motion.svg
+      viewBox="0 0 32 32"
+      className={`${className}`}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ delay: 1, type: "spring", stiffness: 200 }}
+      style={{ imageRendering: "pixelated" }}
+    >
+      {/* Hair */}
+      <rect x="10" y="4" width="12" height="3" fill="#c77dff" />
+      <rect x="9" y="5" width="1" height="2" fill="#c77dff" />
+      <rect x="22" y="5" width="1" height="2" fill="#c77dff" />
+      {/* Face */}
+      <rect x="10" y="7" width="12" height="7" fill="#ffc857" />
+      {/* Eyes */}
+      <rect x="12" y="9" width="2" height="2" fill="#0d0d0d" />
+      <rect x="18" y="9" width="2" height="2" fill="#0d0d0d" />
+      {/* Eye shine */}
+      <rect x="12" y="9" width="1" height="1" fill="#ffffff" />
+      <rect x="18" y="9" width="1" height="1" fill="#ffffff" />
+      {/* Mouth */}
+      <rect x="14" y="12" width="4" height="1" fill="#0d0d0d" />
+      {/* Body/Shirt */}
+      <rect x="8" y="14" width="16" height="8" fill="#a6ff00" />
+      <rect x="10" y="14" width="12" height="2" fill="#7acc00" />
+      {/* Screen/Code symbol on shirt */}
+      <rect x="13" y="17" width="2" height="1" fill="#0d0d0d" />
+      <rect x="16" y="17" width="3" height="1" fill="#0d0d0d" />
+      <rect x="14" y="19" width="4" height="1" fill="#0d0d0d" />
+      {/* Arms */}
+      <rect x="6" y="15" width="2" height="6" fill="#ffc857" />
+      <rect x="24" y="15" width="2" height="6" fill="#ffc857" />
+      {/* Legs */}
+      <rect x="10" y="22" width="4" height="4" fill="#2a2a4a" />
+      <rect x="18" y="22" width="4" height="4" fill="#2a2a4a" />
+      {/* Shoes */}
+      <rect x="9" y="26" width="6" height="2" fill="#c77dff" />
+      <rect x="17" y="26" width="6" height="2" fill="#c77dff" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Ghost (floating decoration) ─── */
+export function PixelGhost({
+  className = "",
+  color = "#c77dff",
+}: {
+  className?: string;
+  color?: string;
+}) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 16"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+      animate={{ y: [0, -6, 0] }}
+      transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+    >
+      <rect x="4" y="2" width="8" height="2" fill={color} />
+      <rect x="3" y="4" width="10" height="6" fill={color} />
+      <rect x="2" y="6" width="12" height="4" fill={color} />
+      <rect x="2" y="10" width="3" height="2" fill={color} />
+      <rect x="6" y="10" width="4" height="2" fill={color} />
+      <rect x="11" y="10" width="3" height="2" fill={color} />
+      {/* Eyes */}
+      <rect x="5" y="5" width="2" height="2" fill="#0d0d0d" />
+      <rect x="9" y="5" width="2" height="2" fill="#0d0d0d" />
+      <rect x="5" y="5" width="1" height="1" fill="#ffffff" />
+      <rect x="9" y="5" width="1" height="1" fill="#ffffff" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Heart ─── */
+export function PixelHeart({ className = "" }: { className?: string }) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 16"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+      animate={{ scale: [1, 1.2, 1] }}
+      transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+    >
+      <rect x="2" y="3" width="3" height="2" fill="#ff4757" />
+      <rect x="1" y="5" width="5" height="2" fill="#ff4757" />
+      <rect x="1" y="7" width="7" height="2" fill="#ff4757" />
+      <rect x="3" y="9" width="5" height="2" fill="#ff4757" />
+      <rect x="5" y="11" width="3" height="2" fill="#ff4757" />
+      <rect x="7" y="13" width="1" height="1" fill="#ff4757" />
+      <rect x="11" y="3" width="3" height="2" fill="#ff4757" />
+      <rect x="10" y="5" width="5" height="2" fill="#ff4757" />
+      <rect x="8" y="7" width="7" height="2" fill="#ff4757" />
+      <rect x="8" y="9" width="5" height="2" fill="#ff4757" />
+      <rect x="8" y="11" width="3" height="2" fill="#ff4757" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Star ─── */
+export function PixelStar({
+  className = "",
+  color = "#ffc857",
+}: {
+  className?: string;
+  color?: string;
+}) {
+  return (
+    <motion.svg
+      viewBox="0 0 12 12"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+      animate={{ rotate: [0, 360] }}
+      transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+    >
+      <rect x="5" y="0" width="2" height="2" fill={color} />
+      <rect x="5" y="10" width="2" height="2" fill={color} />
+      <rect x="0" y="5" width="2" height="2" fill={color} />
+      <rect x="10" y="5" width="2" height="2" fill={color} />
+      <rect x="3" y="3" width="6" height="6" fill={color} />
+      <rect x="4" y="4" width="4" height="4" fill={color} opacity="0.7" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Sword ─── */
+export function PixelSword({ className = "" }: { className?: string }) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 32"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+      animate={{ rotate: [-5, 5, -5] }}
+      transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+    >
+      {/* Blade */}
+      <rect x="7" y="0" width="2" height="18" fill="#9a9aba" />
+      <rect x="6" y="0" width="1" height="16" fill="#e8e8e8" />
+      <rect x="9" y="0" width="1" height="16" fill="#5a5a7a" />
+      {/* Guard */}
+      <rect x="3" y="18" width="10" height="2" fill="#ffc857" />
+      {/* Handle */}
+      <rect x="6" y="20" width="4" height="8" fill="#8b4513" />
+      {/* Pommel */}
+      <rect x="5" y="28" width="6" height="2" fill="#ffc857" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Coffee Cup ─── */
+export function PixelCoffee({ className = "" }: { className?: string }) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 16"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+    >
+      {/* Steam */}
+      <motion.g
+        animate={{ y: [0, -2, 0], opacity: [0.5, 1, 0.5] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        <rect x="5" y="0" width="1" height="2" fill="#9a9aba" />
+        <rect x="8" y="1" width="1" height="2" fill="#9a9aba" />
+        <rect x="11" y="0" width="1" height="2" fill="#9a9aba" />
+      </motion.g>
+      {/* Cup */}
+      <rect x="3" y="4" width="10" height="8" fill="#ffc857" />
+      <rect x="4" y="5" width="8" height="6" fill="#8b4513" />
+      {/* Handle */}
+      <rect x="13" y="5" width="2" height="2" fill="#ffc857" />
+      <rect x="14" y="7" width="2" height="2" fill="#ffc857" />
+      <rect x="13" y="9" width="2" height="2" fill="#ffc857" />
+      {/* Saucer */}
+      <rect x="2" y="12" width="12" height="2" fill="#9a9aba" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Terminal Window ─── */
+export function PixelTerminal({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 48 32"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+    >
+      {/* Window frame */}
+      <rect
+        x="0"
+        y="0"
+        width="48"
+        height="32"
+        fill="#1a1a2e"
+        stroke="#2a2a4a"
+        strokeWidth="1"
+      />
+      {/* Title bar */}
+      <rect x="0" y="0" width="48" height="6" fill="#2a2a4a" />
+      {/* Window buttons */}
+      <rect x="2" y="2" width="2" height="2" fill="#ff4757" />
+      <rect x="5" y="2" width="2" height="2" fill="#ffc857" />
+      <rect x="8" y="2" width="2" height="2" fill="#a6ff00" />
+      {/* Code lines */}
+      <rect x="3" y="9" width="8" height="1" fill="#a6ff00" />
+      <rect x="3" y="12" width="14" height="1" fill="#c77dff" />
+      <rect x="5" y="15" width="20" height="1" fill="#9a9aba" />
+      <rect x="5" y="18" width="12" height="1" fill="#00f0ff" />
+      <rect x="3" y="21" width="16" height="1" fill="#ffc857" />
+      <rect x="3" y="24" width="6" height="1" fill="#a6ff00" />
+      {/* Cursor */}
+      <motion.rect
+        x="10"
+        y="24"
+        width="2"
+        height="2"
+        fill="#a6ff00"
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ repeat: Infinity, duration: 1 }}
+      />
+    </svg>
+  );
+}
+
+/* ─── Pixel Arrow Down (scroll indicator) ─── */
+export function PixelArrowDown({ className = "" }: { className?: string }) {
+  return (
+    <motion.svg
+      viewBox="0 0 16 16"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+      animate={{ y: [0, 6, 0] }}
+      transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+    >
+      <rect x="7" y="1" width="2" height="10" fill="#a6ff00" />
+      <rect x="5" y="8" width="2" height="2" fill="#a6ff00" />
+      <rect x="9" y="8" width="2" height="2" fill="#a6ff00" />
+      <rect x="3" y="10" width="2" height="2" fill="#a6ff00" />
+      <rect x="11" y="10" width="2" height="2" fill="#a6ff00" />
+    </motion.svg>
+  );
+}
+
+/* ─── Pixel Gamepad ─── */
+export function PixelGamepad({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 32 20"
+      className={`${className}`}
+      style={{ imageRendering: "pixelated" }}
+    >
+      {/* Body */}
+      <rect x="4" y="4" width="24" height="12" fill="#2a2a4a" rx="0" />
+      <rect x="2" y="6" width="4" height="8" fill="#2a2a4a" />
+      <rect x="26" y="6" width="4" height="8" fill="#2a2a4a" />
+      {/* D-pad */}
+      <rect x="7" y="8" width="6" height="2" fill="#5a5a7a" />
+      <rect x="9" y="6" width="2" height="6" fill="#5a5a7a" />
+      {/* Buttons */}
+      <rect x="22" y="7" width="2" height="2" fill="#a6ff00" />
+      <rect x="25" y="9" width="2" height="2" fill="#c77dff" />
+      <rect x="19" y="9" width="2" height="2" fill="#ff6ec7" />
+      <rect x="22" y="11" width="2" height="2" fill="#00f0ff" />
+      {/* Center buttons */}
+      <rect x="14" y="9" width="2" height="1" fill="#5a5a7a" />
+    </svg>
+  );
+}
