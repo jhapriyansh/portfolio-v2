@@ -90,8 +90,9 @@ export default function AdminPage() {
   const [skTitle, setSkTitle] = useState("");
   const [skIcon, setSkIcon] = useState("⌨️");
   const [skColor, setSkColor] = useState("#a6ff00");
-  const [skSkills, setSkSkills] = useState("");
+  const [skSkill, setSkSkill] = useState("");
   const [skOrder, setSkOrder] = useState(0);
+  const [skIsExisting, setSkIsExisting] = useState(false);
 
   // ─── Projects state ───
   const [projects, setProjects] = useState<ProjectEntry[]>([]);
@@ -243,8 +244,32 @@ export default function AdminPage() {
   }
 
   /* ──────── CRUD — skills ──────── */
+
+  function handleCategorySelect(title: string) {
+    if (!title) {
+      setSkTitle("");
+      setSkIcon("⌨️");
+      setSkColor("#a6ff00");
+      setSkOrder(0);
+      setSkIsExisting(false);
+      return;
+    }
+    const existing = skills.find((c) => c.title === title);
+    if (existing) {
+      setSkTitle(existing.title);
+      setSkIcon(existing.icon);
+      setSkColor(existing.color);
+      setSkOrder(existing.order);
+      setSkIsExisting(true);
+    } else {
+      setSkTitle(title);
+      setSkIsExisting(false);
+    }
+  }
+
   async function createSkill(e: React.FormEvent) {
     e.preventDefault();
+    if (!skSkill.trim()) return;
     setLoading(true);
     setError("");
     setSuccess("");
@@ -256,34 +281,52 @@ export default function AdminPage() {
           title: skTitle,
           icon: skIcon,
           color: skColor,
-          skills: skSkills
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
+          skill: skSkill.trim(),
           order: skOrder,
           password,
         }),
       });
       if (res.ok) {
-        setSuccess("Skill category created");
-        setSkTitle("");
-        setSkIcon("⌨️");
-        setSkSkills("");
-        setSkOrder(0);
+        setSuccess(`Added "${skSkill.trim()}" to ${skTitle}`);
+        setSkSkill("");
         await fetchAll();
       } else {
         const d = await res.json();
         setError(d.error || "Failed");
       }
     } catch {
-      setError("Failed to create skill");
+      setError("Failed to add skill");
     } finally {
       setLoading(false);
     }
   }
 
+  async function removeSkillItem(categoryId: string, skillName: string) {
+    if (!confirm(`Remove "${skillName}"?`)) return;
+    try {
+      const res = await fetch("/api/skills", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _id: categoryId,
+          removeSkill: skillName,
+          password,
+        }),
+      });
+      if (res.ok) {
+        setSuccess(`Removed "${skillName}"`);
+        await fetchAll();
+      } else {
+        const d = await res.json();
+        setError(d.error || "Failed");
+      }
+    } catch {
+      setError("Delete failed");
+    }
+  }
+
   async function deleteSkill(id: string) {
-    if (!confirm("Delete this skill category?")) return;
+    if (!confirm("Delete this entire skill category?")) return;
     try {
       await fetch(
         `/api/skills?id=${id}&password=${encodeURIComponent(password)}`,
@@ -680,22 +723,37 @@ export default function AdminPage() {
               }}
             >
               <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff] mb-6">
-                + New Skill Category
+                + Add Skill
               </h2>
               <form onSubmit={createSkill} className="space-y-5">
                 <div>
                   <label className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] block mb-2">
-                    TITLE:
+                    CATEGORY:
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={skTitle}
-                    onChange={(e) => setSkTitle(e.target.value)}
-                    required
+                    onChange={(e) => handleCategorySelect(e.target.value)}
                     className={inputClass}
                     style={inputStyle}
-                    placeholder="e.g. Frontend"
-                  />
+                  >
+                    <option value="">— New category —</option>
+                    {skills.map((cat) => (
+                      <option key={cat._id} value={cat.title}>
+                        {cat.icon} {cat.title}
+                      </option>
+                    ))}
+                  </select>
+                  {!skIsExisting && (
+                    <input
+                      type="text"
+                      value={skTitle}
+                      onChange={(e) => setSkTitle(e.target.value)}
+                      required
+                      className={`${inputClass} mt-2`}
+                      style={inputStyle}
+                      placeholder="New category name"
+                    />
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -709,6 +767,7 @@ export default function AdminPage() {
                       className={inputClass}
                       style={inputStyle}
                       placeholder="⌨️"
+                      disabled={skIsExisting}
                     />
                   </div>
                   <div>
@@ -720,6 +779,7 @@ export default function AdminPage() {
                       onChange={(e) => setSkColor(e.target.value)}
                       className={inputClass}
                       style={inputStyle}
+                      disabled={skIsExisting}
                     >
                       {colorOptions.map((c) => (
                         <option key={c.value} value={c.value}>
@@ -731,16 +791,16 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <label className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] block mb-2">
-                    SKILLS (comma separated):
+                    SKILL:
                   </label>
                   <input
                     type="text"
-                    value={skSkills}
-                    onChange={(e) => setSkSkills(e.target.value)}
+                    value={skSkill}
+                    onChange={(e) => setSkSkill(e.target.value)}
                     required
                     className={inputClass}
                     style={inputStyle}
-                    placeholder="React, Next.js, ..."
+                    placeholder="e.g. React"
                   />
                 </div>
                 <div>
@@ -753,14 +813,19 @@ export default function AdminPage() {
                     onChange={(e) => setSkOrder(Number(e.target.value))}
                     className={inputClass}
                     style={inputStyle}
+                    disabled={skIsExisting}
                   />
                 </div>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !skSkill.trim() || !skTitle.trim()}
                   className="pixel-btn w-full"
                 >
-                  {loading ? "Creating..." : "Create Category"}
+                  {loading
+                    ? "Adding..."
+                    : skIsExisting
+                      ? `Add to ${skTitle}`
+                      : "Create & Add Skill"}
                 </button>
               </form>
             </div>
@@ -804,10 +869,17 @@ export default function AdminPage() {
                       {cat.skills.map((s) => (
                         <span
                           key={s}
-                          className="font-['Press_Start_2P'] text-[6px] px-1.5 py-0.5 bg-[#2a2a4a]/50 text-[#9a9aba]"
+                          className="font-['Press_Start_2P'] text-[6px] px-1.5 py-0.5 bg-[#2a2a4a]/50 text-[#9a9aba] inline-flex items-center gap-1 group/skill"
                           style={{ borderRadius: "2px" }}
                         >
                           {s}
+                          <button
+                            onClick={() => removeSkillItem(cat._id, s)}
+                            className="text-[#ff4757] opacity-0 group-hover/skill:opacity-100 transition-opacity hover:text-[#ff6b81] ml-0.5"
+                            title={`Remove ${s}`}
+                          >
+                            ×
+                          </button>
                         </span>
                       ))}
                     </div>

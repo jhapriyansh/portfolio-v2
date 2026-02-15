@@ -21,34 +21,75 @@ export async function GET() {
   }
 }
 
-// POST — create a skill category (admin)
+// POST — add skill to category (creates if new, appends if exists)
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { password, ...data } = body;
+    const { password, title, skill, icon, color, order } = body;
     await dbConnect();
     if (!(await verifyAdmin(password))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const cat = await SkillCategory.create(data);
-    return NextResponse.json(cat, { status: 201 });
+    if (!title || !skill) {
+      return NextResponse.json(
+        { error: "Title and skill are required" },
+        { status: 400 }
+      );
+    }
+
+    const existing = await SkillCategory.findOne({ title });
+    if (existing) {
+      if (existing.skills.includes(skill)) {
+        return NextResponse.json(
+          { error: `"${skill}" already exists in "${title}"` },
+          { status: 400 }
+        );
+      }
+      existing.skills.push(skill);
+      await existing.save();
+      return NextResponse.json(existing, { status: 200 });
+    } else {
+      const cat = await SkillCategory.create({
+        title,
+        icon: icon || "⌨️",
+        color: color || "#a6ff00",
+        skills: [skill],
+        order: order ?? 0,
+      });
+      return NextResponse.json(cat, { status: 201 });
+    }
   } catch {
     return NextResponse.json(
-      { error: "Failed to create skill category" },
+      { error: "Failed to create/update skill category" },
       { status: 500 }
     );
   }
 }
 
-// PUT — update a skill category (admin)
+// PUT — update a skill category or remove a single skill (admin)
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    const { password, _id, ...data } = body;
+    const { password, _id, removeSkill, ...data } = body;
     await dbConnect();
     if (!(await verifyAdmin(password))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    if (removeSkill) {
+      const cat = await SkillCategory.findById(_id);
+      if (!cat) {
+        return NextResponse.json({ error: "Not found" }, { status: 404 });
+      }
+      cat.skills = cat.skills.filter((s: string) => s !== removeSkill);
+      if (cat.skills.length === 0) {
+        await SkillCategory.findByIdAndDelete(_id);
+        return NextResponse.json({ deleted: true });
+      }
+      await cat.save();
+      return NextResponse.json(cat);
+    }
+
     const cat = await SkillCategory.findByIdAndUpdate(_id, data, { new: true });
     return NextResponse.json(cat);
   } catch {
