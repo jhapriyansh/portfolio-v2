@@ -153,6 +153,8 @@ init.sh                       # Database seed script
 - Enable editing of existing skills and skill categories.
 - Improve admin UX with inline edits and confirmations.
 - Fix mobile navigation issues (hamburger menu behavior, layout overflows, and viewport scrolling bugs).
+- Enable logging of admin actions (create/update/delete) for audit purposes.
+- View recent visits logs in the admin dashboard.(posthog like)
 
 ---
 
