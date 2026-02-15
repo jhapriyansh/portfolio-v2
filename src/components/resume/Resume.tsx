@@ -146,6 +146,7 @@ export default function Resume() {
               }}
               className="font-['Press_Start_2P'] cursor-pointer inline-flex items-center gap-4"
               style={{
+                marginTop: "clamp(1.5rem, 3vh, 3rem)",
                 fontSize: "clamp(11px, 1.2vw, 14px)",
                 padding: "clamp(1rem, 2vh, 1.4rem) clamp(2rem, 4vw, 3rem)",
                 background: "#ffc85715",
