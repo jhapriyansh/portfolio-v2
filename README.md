@@ -147,6 +147,13 @@ init.sh                       # Database seed script
 
 ---
 
+## 🔮 Future Work
+- Enable editing of existing projects from the admin panel.
+- Enable editing of existing skills and skill categories.
+- Improve admin UX with inline edits and confirmations.
+
+---
+
 ## 📜 License
 
 MIT

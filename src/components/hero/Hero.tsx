@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import {
   PixelDeveloper,
   PixelGhost,
@@ -12,44 +12,9 @@ import {
   PixelGamepad,
 } from "../sprites/PixelSprites";
 
-function useTypewriter(text: string, speed = 50, delay = 1200) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      let i = 0;
-      const interval = setInterval(() => {
-        setDisplayed(text.slice(0, i + 1));
-        i++;
-        if (i >= text.length) {
-          clearInterval(interval);
-          setDone(true);
-        }
-      }, speed);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [text, speed, delay]);
-
-  return { displayed, done };
-}
-
 export default function Hero() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const { displayed: subtitle, done: subtitleDone } = useTypewriter(
-    "full_stack_developer // systems_enthusiast",
-    40,
-    1500,
-  );
-
-  const tags = [
-    { text: "MERN stack", color: "tag-pill" },
-    { text: "C / C++ & systems", color: "tag-pill-purple" },
-    { text: "WebAssembly", color: "tag-pill-pink" },
-    { text: "Performance", color: "tag-pill-amber" },
-  ];
 
   return (
     <section
@@ -188,23 +153,8 @@ export default function Hero() {
             Jha <span className="text-[#c77dff]">{"}"}</span>
           </motion.h1>
 
-          {/* Subtitle typewriter */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 1 }}
-            className="mb-8"
-          >
-            <p
-              className="font-['Press_Start_2P'] text-[#a6ff00] glow-green"
-              style={{ fontSize: "clamp(9px, 1.1vw, 14px)" }}
-            >
-              {subtitle}
-              {!subtitleDone && (
-                <span style={{ animation: "blink 0.8s infinite" }}>○</span>
-              )}
-            </p>
-          </motion.div>
+          {/* Subtitle spacer */}
+          <div className="h-8" />
 
           {/* Description */}
           <motion.p
@@ -223,26 +173,8 @@ export default function Hero() {
             browser performance further.
           </motion.p>
 
-          {/* Tags */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 2.2, duration: 0.5 }}
-            className="flex flex-wrap gap-3 justify-center md:justify-start mb-10"
-          >
-            {tags.map((tag, i) => (
-              <motion.span
-                key={tag.text}
-                className={tag.color}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 2.4 + i * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                {tag.text}
-              </motion.span>
-            ))}
-          </motion.div>
+          {/* Tags spacer */}
+          <div className="h-4" />
 
           {/* CTA Buttons */}
           <motion.div
