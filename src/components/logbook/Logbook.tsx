@@ -179,7 +179,7 @@ export default function Logbook() {
             Logbook
           </h2>
           <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
-            {"// "}what_ive_been_up_to.recent()
+            {"// "}what_ive_been_up_to.recently()
           </p>
         </motion.div>
 
@@ -235,10 +235,6 @@ export default function Logbook() {
           transition={{ delay: 0.8 }}
           className="text-center mt-5"
         >
-          <span className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
-            {">"} auto-synced from cloud database ·{" "}
-            <span className="text-[#a6ff00]">live</span>
-          </span>
         </motion.div>
       </div>
     </section>

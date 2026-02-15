@@ -12,9 +12,8 @@ export default function Resume() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  // Replace this with your actual Google Drive share link
   const resumeDriveLink =
-    "https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing";
+    "https://drive.google.com/file/d/1JeVfrKL_VtLY9O87wyi5j-WvdF8wIiIy/view";
 
   return (
     <section

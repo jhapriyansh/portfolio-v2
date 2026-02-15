@@ -20,13 +20,13 @@ export default function Contact() {
   const socialLinks = [
     {
       name: "GitHub",
-      url: "https://github.com/priyanshu",
+      url: "https://github.com/jhapriyansh",
       icon: "◈",
       color: "#e8e8e8",
     },
     {
       name: "LinkedIn",
-      url: "https://linkedin.com/in/priyanshu",
+      url: "https://www.linkedin.com/in/priyanshu-kumarjha",
       icon: "◆",
       color: "#00f0ff",
     },

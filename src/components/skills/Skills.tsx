@@ -199,12 +199,16 @@ export default function Skills() {
             className="text-[#9a9aba] leading-relaxed"
             style={{ fontSize: "clamp(0.875rem, 1.1vw, 1.1rem)" }}
           >
-            I&apos;m a full stack developer who enjoys building things that are{" "}
+            I’m a full stack developer who enjoys building things that are{" "}
             <span className="text-[#a6ff00]">fast</span>,{" "}
             <span className="text-[#c77dff]">functional</span>, and{" "}
-            <span className="text-[#ffc857]">easy to use</span>. I dig into
-            operating systems, internals, and low-level details while caring
-            deeply about good UI and developer experience.
+            <span className="text-[#ffc857]">easy to use</span>. I care deeply
+            about UI and developer experience, dig into{" "}
+            <span className="text-[#00f0ff]">systems</span> and{" "}
+            <span className="text-[#ff6b6b]">OS internals</span>, and I’m
+            gradually bringing{" "}
+            <span className="text-[#b8f2e6]">deep learning</span> into the stack
+            where it makes sense.
           </p>
         </motion.div>
 

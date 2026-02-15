@@ -166,7 +166,7 @@ export default function Hero() {
             className="mb-4"
           >
             <span className="font-['Press_Start_2P'] text-[9px] text-[#5a5a7a] tracking-widest">
-              {">"} SYSTEM.boot() — v2.0.26
+              {">"} SYSTEM.boot() — v2.0.0
             </span>
           </motion.div>
 
@@ -216,11 +216,12 @@ export default function Hero() {
             style={{ fontSize: "clamp(0.875rem, 1.2vw, 1.125rem)" }}
           >
             I build fast, clean web applications with React / Next.js and
-            Node.js, with a growing focus on{" "}
+            Node.js. Lately, I’m diving into{" "}
             <span className="text-[#c77dff]">systems</span>,{" "}
-            <span className="text-[#00f0ff]">OS internals</span>, and{" "}
-            <span className="text-[#ffc857]">WebAssembly</span> to squeeze more
-            out of the browser.
+            <span className="text-[#00f0ff]">OS internals</span>,{" "}
+            <span className="text-[#ffc857]">WebAssembly</span>, and{" "}
+            <span className="text-[#ff6b6b]">deep learning</span> to push
+            browser performance further.
           </motion.p>
 
           {/* Tags */}
