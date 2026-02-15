@@ -55,8 +55,8 @@ export default function Resume() {
           {/* Resume card */}
           <div
             className="w-full bg-[#1a1a2e]/60"
-            style={{ padding: "clamp(2.5rem, 5vw, 5rem)" }}
             style={{
+              padding: "clamp(2.5rem, 5vw, 5rem)",
               border: "3px solid #ffc85740",
               borderRadius: "10px 4px 12px 6px",
               boxShadow: "5px 5px 0px #ffc85720",
@@ -126,18 +126,45 @@ export default function Resume() {
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.7 }}
-              whileHover={{ scale: 1.04, y: -2 }}
-              whileTap={{ scale: 0.97, y: 1 }}
-              className="pixel-btn inline-flex items-center gap-3 text-[10px]"
+              transition={{ duration: 0.15 }}
+              whileHover={{
+                scale: 1.04,
+                y: -3,
+                x: -2,
+                boxShadow: "6px 6px 0px #ffc85750",
+                background: "#ffc857",
+                color: "#0d0d0d",
+                borderColor: "#ffc857",
+                transition: { duration: 0.15, delay: 0 },
+              }}
+              whileTap={{
+                scale: 0.97,
+                y: 2,
+                x: 2,
+                boxShadow: "0px 0px 0px #ffc85730",
+                transition: { duration: 0.1, delay: 0 },
+              }}
+              className="font-['Press_Start_2P'] cursor-pointer inline-flex items-center gap-4"
               style={{
+                fontSize: "clamp(11px, 1.2vw, 14px)",
+                padding: "clamp(1rem, 2vh, 1.4rem) clamp(2rem, 4vw, 3rem)",
                 background: "#ffc85715",
                 color: "#ffc857",
-                borderColor: "#ffc857",
+                border: "2px solid #ffc857",
+                borderRadius: "4px 2px 6px 3px",
                 boxShadow: "4px 4px 0px #ffc85740",
               }}
             >
-              <span>↗</span>
+              <motion.span
+                animate={{ x: [0, 3, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.5,
+                  ease: "easeInOut",
+                }}
+              >
+                ↗
+              </motion.span>
               <span>View Resume</span>
             </motion.a>
           </div>

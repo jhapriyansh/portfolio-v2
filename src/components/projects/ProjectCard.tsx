@@ -36,8 +36,8 @@ export default function ProjectCard({
     >
       <div
         className="relative bg-[#1a1a2e]/60 transition-all duration-300 cursor-default h-full flex flex-col"
-        style={{ padding: "clamp(2rem, 4vw, 4rem)" }}
         style={{
+          padding: "clamp(2rem, 4vw, 4rem)",
           border: `3px solid ${hovered ? project.color : "#2a2a4a"}`,
           borderRadius: borderRadii[index % borderRadii.length],
           boxShadow: hovered
@@ -80,8 +80,10 @@ export default function ProjectCard({
           <div>
             <h3
               className="font-['Press_Start_2P'] leading-relaxed mb-2"
-              style={{ fontSize: "clamp(0.75rem, 1.2vw, 1.1rem)" }}
-              style={{ color: project.color }}
+              style={{
+                fontSize: "clamp(0.75rem, 1.2vw, 1.1rem)",
+                color: project.color,
+              }}
             >
               {project.title}
             </h3>
@@ -140,11 +142,21 @@ export default function ProjectCard({
           }}
         >
           {project.codeUrl && (
-            <a
+            <motion.a
               href={project.codeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:-translate-y-px"
+              whileHover={{
+                y: -3,
+                x: -2,
+                boxShadow: `5px 5px 0px ${project.color}50`,
+              }}
+              whileTap={{
+                y: 2,
+                x: 2,
+                boxShadow: `0px 0px 0px ${project.color}30`,
+              }}
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer"
               style={{
                 background: `${project.color}10`,
                 color: project.color,
@@ -154,14 +166,26 @@ export default function ProjectCard({
               }}
             >
               {"<Code />"}
-            </a>
+            </motion.a>
           )}
           {project.liveUrl && (
-            <a
+            <motion.a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:-translate-y-px"
+              whileHover={{
+                y: -3,
+                x: -2,
+                boxShadow: `6px 6px 0px ${project.color}aa`,
+                scale: 1.04,
+              }}
+              whileTap={{
+                y: 2,
+                x: 2,
+                boxShadow: `0px 0px 0px ${project.color}80`,
+                scale: 0.97,
+              }}
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer"
               style={{
                 background: project.color,
                 color: "#0d0d0d",
@@ -171,7 +195,7 @@ export default function ProjectCard({
               }}
             >
               {"▸ Live"}
-            </a>
+            </motion.a>
           )}
         </div>
       </div>

@@ -84,8 +84,10 @@ export default function Contact() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.5 }}
           className="sketch-border bg-[#1a1a2e]/60 text-center w-full"
-          style={{ padding: "clamp(2.5rem, 5vw, 5rem)" }}
-          style={{ borderColor: "#2a2a4a" }}
+          style={{
+            padding: "clamp(2.5rem, 5vw, 5rem)",
+            borderColor: "#2a2a4a",
+          }}
         >
           <motion.p
             initial={{ opacity: 0 }}
@@ -159,21 +161,34 @@ export default function Contact() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.8 + i * 0.1 }}
-                whileHover={{ y: -3, scale: 1.05 }}
-                whileTap={{ y: 1, scale: 0.98 }}
-                className="flex items-center gap-2 px-4 py-3 transition-all duration-200"
+                whileHover={{
+                  y: -3,
+                  x: -2,
+                  scale: 1.04,
+                  boxShadow: `6px 6px 0px ${link.color}50`,
+                  background: link.color,
+                  color: "#0d0d0d",
+                  borderColor: link.color,
+                  transition: { duration: 0.15, delay: 0 },
+                }}
+                whileTap={{
+                  y: 2,
+                  x: 2,
+                  scale: 0.97,
+                  boxShadow: `0px 0px 0px ${link.color}30`,
+                  transition: { duration: 0.1, delay: 0 },
+                }}
+                className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer flex items-center gap-2"
                 style={{
-                  background: `${link.color}08`,
-                  border: `2px solid ${link.color}30`,
-                  borderRadius: "6px 3px 8px 4px",
-                  boxShadow: `3px 3px 0px ${link.color}15`,
+                  background: `${link.color}10`,
                   color: link.color,
+                  border: `2px solid ${link.color}50`,
+                  borderRadius: "4px 2px 6px 3px",
+                  boxShadow: `3px 3px 0px ${link.color}30`,
                 }}
               >
-                <span className="text-sm">{link.icon}</span>
-                <span className="font-['Press_Start_2P'] text-[8px]">
-                  {link.name}
-                </span>
+                <span>{link.icon}</span>
+                <span>{link.name}</span>
               </motion.a>
             ))}
           </motion.div>
