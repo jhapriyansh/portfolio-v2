@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 Priyanshu's Developer Portfolio
 
-## Getting Started
+An **8-bit retro-themed** developer portfolio built with Next.js, featuring CRT scanlines, pixel-art sprites, neon glow effects, and a fully dynamic admin panel backed by MongoDB.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb)
+
+---
+
+## ✨ Features
+
+- **Pixel-art aesthetic** — `Press Start 2P` headings, `Space Mono` body, SVG pixel sprites, sketchy asymmetric borders
+- **CRT effects** — scanline overlay, flicker animation, power-on boot sequence
+- **Neon glow** — multi-layer text shadows in acid green, purple, pink, cyan, amber
+- **Fully responsive** — `clamp()` based sizing, no hard breakpoints or `max-w-*` wrappers
+- **Dynamic content** — Skills, Projects & Logbook sections fetch from MongoDB with graceful fallbacks
+- **Admin panel** — Password-protected CRUD dashboard at `/admin`
+- **Framer Motion** — entrance animations, hover effects, tab transitions
+- **Seed script** — one-command database population
+
+---
+
+## 🗂️ Sections
+
+| Section      | Description                                                                  |
+| ------------ | ---------------------------------------------------------------------------- |
+| **Hero**     | Typewriter intro with pixel sprite decorations and animated entrance         |
+| **Skills**   | Categorized skill bars fetched from API (Languages, Frontend, Backend, etc.) |
+| **Projects** | Project cards with tech tags, type badges, and code/live links               |
+| **Logbook**  | Terminal-style dev log with expandable entries, tags, and timestamps         |
+| **Resume**   | Download link with pixel sprite accents                                      |
+| **Contact**  | Email copy-to-clipboard + social links (GitHub, LinkedIn)                    |
+
+Sections are separated by themed pixel dividers (dashed, dots, arrow variants).
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer     | Technology                                 |
+| --------- | ------------------------------------------ |
+| Framework | Next.js 16 (App Router)                    |
+| UI        | React 19, Tailwind CSS 4, Framer Motion 12 |
+| Language  | TypeScript 5                               |
+| Database  | MongoDB via Mongoose 9                     |
+| Auth      | bcryptjs (password hashing)                |
+| Fonts     | Press Start 2P + Space Mono                |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/jhapriyansh/portfolio-v2
+cd portfolio-v2
+npm install
+```
+
+### 2. Environment Variables
+
+Create a `.env.local` file:
+
+```
+MONGODB_URI=your_mongodb_connection_string
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Seed the Database (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+With the dev server running:
 
-## Learn More
+```bash
+./init.sh                          # defaults to http://localhost:3000
+./init.sh https://your-domain.com  # or pass a custom base URL
+```
 
-To learn more about Next.js, take a look at the following resources:
+This populates **6 skill categories** (28 skills), **6 projects**, and **5 logbook entries**. Safe to re-run — duplicate skills are rejected via upsert.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> The default admin password used by `init.sh` is `password`. Change it after first login.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Build for Production
 
-## Deploy on Vercel
+```bash
+npm run build
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔐 Admin Panel
+
+Navigate to `/admin` to access the dashboard. On first visit, you'll be prompted to create a password (stored as a bcrypt hash in MongoDB).
+
+| Tab          | Capabilities                                                                                        |
+| ------------ | --------------------------------------------------------------------------------------------------- |
+| **Logbook**  | Create/delete log entries (title, content, tags, emoji)                                             |
+| **Skills**   | Add skills to existing categories or create new ones; delete individual skills or entire categories |
+| **Projects** | Full CRUD for projects (title, subtitle, type, description, tech, URLs, color, icon, order)         |
+| **Settings** | Admin settings                                                                                      |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx              # Main page (all sections)
+│   ├── layout.tsx            # Root layout, fonts, metadata
+│   ├── globals.css           # Theme, CRT effects, pixel-btn, neon glow
+│   ├── admin/page.tsx        # Admin dashboard
+│   └── api/
+│       ├── auth/route.ts     # Admin login/register
+│       ├── skills/route.ts   # Skills CRUD (upsert support)
+│       ├── projects/route.ts # Projects CRUD
+│       └── logbook/route.ts  # Logbook CRUD
+├── components/
+│   ├── Nav.tsx
+│   ├── hero/Hero.tsx
+│   ├── skills/Skills.tsx
+│   ├── projects/Projects.tsx, ProjectCard.tsx, projects.data.ts
+│   ├── logbook/Logbook.tsx, logbook.data.ts
+│   ├── resume/Resume.tsx
+│   ├── contact/Contact.tsx
+│   ├── sprites/PixelSprites.tsx
+│   └── ui/Divider.tsx, Footer.tsx
+├── lib/
+│   ├── mongodb.ts            # Mongoose connection
+│   ├── AdminUser.ts          # Admin model
+│   ├── SkillCategory.ts      # Skills model
+│   ├── Project.ts            # Project model
+│   └── LogEntry.ts           # Log entry model
+init.sh                       # Database seed script
+```
+
+---
+
+## 📜 License
+
+MIT

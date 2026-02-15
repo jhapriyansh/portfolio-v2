@@ -89,16 +89,15 @@ function SkillBar({
     >
       <div
         className="flex items-center gap-3 transition-all duration-200 cursor-default"
-        style={{ padding: "clamp(0.6rem, 1.2vh, 1rem) clamp(1rem, 2vw, 2rem)" }}
         style={{
+          padding: "clamp(0.6rem, 1.2vh, 1rem) clamp(1rem, 2vw, 2rem)",
           background: hovered ? `${color}15` : "transparent",
           borderLeft: `3px solid ${hovered ? color : "transparent"}`,
         }}
       >
         <motion.span
           className="font-['Press_Start_2P']"
-          style={{ fontSize: "clamp(7px, 0.7vw, 10px)" }}
-          style={{ color }}
+          style={{ fontSize: "clamp(7px, 0.7vw, 10px)", color }}
           animate={hovered ? { x: [0, 2, 0] } : {}}
           transition={{ duration: 0.2 }}
         >
@@ -106,8 +105,10 @@ function SkillBar({
         </motion.span>
         <span
           className="font-mono transition-colors duration-200"
-          style={{ fontSize: "clamp(14px, 1.2vw, 18px)" }}
-          style={{ color: hovered ? color : "#9a9aba" }}
+          style={{
+            fontSize: "clamp(14px, 1.2vw, 18px)",
+            color: hovered ? color : "#9a9aba",
+          }}
         >
           {name}
         </span>
@@ -219,8 +220,8 @@ export default function Skills() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 + catIdx * 0.1, duration: 0.5 }}
               className="sketch-border bg-[#1a1a2e]/40 hover:bg-[#1a1a2e]/70 transition-all duration-300 group"
-              style={{ minHeight: "clamp(18rem, 30vh, 24rem)" }}
               style={{
+                minHeight: "clamp(18rem, 30vh, 24rem)",
                 borderColor: `${cat.color}40`,
                 borderRadius: `${8 + catIdx * 2}px ${4 + catIdx}px ${12 - catIdx}px ${6 + catIdx * 2}px`,
               }}
@@ -230,16 +231,18 @@ export default function Skills() {
                 className="border-b flex items-center gap-3"
                 style={{
                   padding: "clamp(1rem, 1.8vh, 1.5rem) clamp(1rem, 2vw, 2rem)",
+                  borderColor: `${cat.color}20`,
                 }}
-                style={{ borderColor: `${cat.color}20` }}
               >
                 <span style={{ fontSize: "clamp(1.2rem, 2vw, 2rem)" }}>
                   {cat.icon}
                 </span>
                 <h3
                   className="font-['Press_Start_2P'] uppercase tracking-wider"
-                  style={{ fontSize: "clamp(9px, 0.9vw, 13px)" }}
-                  style={{ color: cat.color }}
+                  style={{
+                    fontSize: "clamp(9px, 0.9vw, 13px)",
+                    color: cat.color,
+                  }}
                 >
                   {cat.title}
                 </h3>

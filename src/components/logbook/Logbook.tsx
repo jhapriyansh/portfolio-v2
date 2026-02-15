@@ -189,8 +189,11 @@ export default function Logbook() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2 }}
           className="sketch-border bg-[#1a1a2e]/60 overflow-hidden"
-          style={{ minHeight: "clamp(40vh, 55vh, 65vh)" }}
-          style={{ borderColor: "#2a2a4a", borderRadius: "8px 4px 10px 6px" }}
+          style={{
+            minHeight: "clamp(40vh, 55vh, 65vh)",
+            borderColor: "#2a2a4a",
+            borderRadius: "8px 4px 10px 6px",
+          }}
         >
           {/* Terminal title bar */}
           <div className="flex items-center gap-2 px-5 py-3 bg-[#2a2a4a]/60 border-b border-[#2a2a4a]">
