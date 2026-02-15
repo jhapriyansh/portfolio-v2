@@ -27,16 +27,15 @@ export default function Divider({
         }}
       >
         {[...Array(dotCount)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ scale: 0 }}
-            animate={isInView ? { scale: 1 } : {}}
-            transition={{ delay: i * 0.02, type: "spring" }}
             className="w-1.5 h-1.5 shrink-0"
             style={{
               backgroundColor: color,
-              opacity: 0.4,
+              opacity: isInView ? 0.4 : 0,
               borderRadius: "1px",
+              transform: isInView ? "scale(1)" : "scale(0)",
+              transition: `transform 0.4s cubic-bezier(.2,.6,.35,1.2) ${i * 0.02}s, opacity 0.3s ease ${i * 0.02}s`,
             }}
           />
         ))}
@@ -56,19 +55,18 @@ export default function Divider({
         style={{ padding: "clamp(0.4rem, 1vh, 1rem) clamp(0.5rem, 1vw, 1rem)" }}
       >
         {[...Array(arrowCount)].map((_, i) => (
-          <motion.span
+          <span
             key={i}
-            className="font-['Press_Start_2P'] text-[10px]"
-            style={{ color, opacity: 0.3 }}
-            animate={{ y: [0, 4, 0] }}
-            transition={{
-              repeat: Infinity,
-              duration: 1.5,
-              delay: i * 0.1,
+            className="font-['Press_Start_2P'] text-[10px] inline-block"
+            style={{
+              color,
+              opacity: 0.3,
+              animation: "divider-arrow-bob 1.5s ease-in-out infinite",
+              animationDelay: `${i * 0.1}s`,
             }}
           >
             ▼
-          </motion.span>
+          </span>
         ))}
       </motion.div>
     );

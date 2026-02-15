@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export default function Footer() {
   return (
     <footer className="bg-[#0d0d0d]">
@@ -10,10 +8,9 @@ export default function Footer() {
         style={{ padding: "clamp(2rem, 4vh, 4rem) clamp(1.5rem, 6vw, 8rem)" }}
       >
         <div className="flex items-center gap-2">
-          <motion.div
+          <div
             className="w-1.5 h-1.5 bg-[#a6ff00] rounded-full"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ repeat: Infinity, duration: 2.5 }}
+            style={{ animation: "dot-pulse 2.5s ease-in-out infinite" }}
           />
           <span className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
             © 2026 Priyanshu Kumar Jha · built with Next.js

@@ -155,16 +155,14 @@ export default function Resume() {
                 boxShadow: "4px 4px 0px #ffc85740",
               }}
             >
-              <motion.span
-                animate={{ x: [0, 3, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 1.5,
-                  ease: "easeInOut",
+              <span
+                style={{
+                  animation: "nudge-right 1.5s ease-in-out infinite",
+                  display: "inline-block",
                 }}
               >
                 ↗
-              </motion.span>
+              </span>
               <span>View Resume</span>
             </motion.a>
           </div>

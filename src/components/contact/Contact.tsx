@@ -106,16 +106,32 @@ export default function Contact() {
 
           {/* Email display */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.5 }}
+            variants={{
+              hidden: { opacity: 0, scale: 0.9 },
+              visible: {
+                opacity: 1,
+                scale: 1,
+                transition: { delay: 0.5, duration: 0.4 },
+              },
+            }}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
             className=""
             style={{ marginBottom: "clamp(1.5rem, 3vh, 3rem)" }}
           >
             <motion.button
               onClick={copyEmail}
-              whileHover={{ y: -2, scale: 1.02 }}
-              whileTap={{ y: 1, scale: 0.98 }}
+              whileHover={{
+                y: -2,
+                scale: 1.02,
+                transition: { duration: 0.12, delay: 0 },
+              }}
+              whileTap={{
+                y: 1,
+                scale: 0.98,
+                transition: { duration: 0.08, delay: 0 },
+              }}
+              transition={{ duration: 0.12 }}
               className="group inline-flex items-center gap-3 bg-[#0d0d0d]/60 px-6 py-4 transition-all duration-300 hover:bg-[#a6ff00]/10"
               style={{
                 border: "2px solid #a6ff0050",
@@ -158,9 +174,17 @@ export default function Contact() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.8 + i * 0.1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { delay: 0.8 + i * 0.1, duration: 0.4 },
+                  },
+                }}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                transition={{ duration: 0.12 }}
                 whileHover={{
                   y: -3,
                   x: -2,
@@ -169,14 +193,14 @@ export default function Contact() {
                   background: link.color,
                   color: "#0d0d0d",
                   borderColor: link.color,
-                  transition: { duration: 0.15, delay: 0 },
+                  transition: { duration: 0.12, delay: 0 },
                 }}
                 whileTap={{
                   y: 2,
                   x: 2,
                   scale: 0.97,
                   boxShadow: `0px 0px 0px ${link.color}30`,
-                  transition: { duration: 0.1, delay: 0 },
+                  transition: { duration: 0.08, delay: 0 },
                 }}
                 className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer flex items-center gap-2"
                 style={{

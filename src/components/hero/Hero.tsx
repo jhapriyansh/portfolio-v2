@@ -133,22 +133,26 @@ export default function Hero() {
         />
 
         {/* Large decorative gamepad */}
-        <motion.div
-          className="absolute -right-4 top-[20%] opacity-[0.08] rotate-12"
-          animate={{ rotate: [12, 15, 12] }}
-          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+        <div
+          className="absolute -right-4 top-[20%] opacity-[0.08]"
+          style={{
+            animation: "gamepad-rock-right 6s ease-in-out infinite",
+            willChange: "transform",
+          }}
         >
           <PixelGamepad className="w-64 h-40" />
-        </motion.div>
+        </div>
 
         {/* Second gamepad on left */}
-        <motion.div
-          className="absolute -left-8 bottom-[15%] opacity-[0.05] -rotate-6"
-          animate={{ rotate: [-6, -3, -6] }}
-          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        <div
+          className="absolute -left-8 bottom-[15%] opacity-[0.05]"
+          style={{
+            animation: "gamepad-rock-left 8s ease-in-out infinite",
+            willChange: "transform",
+          }}
         >
           <PixelGamepad className="w-48 h-32" />
-        </motion.div>
+        </div>
       </div>
 
       {/* Main content */}
@@ -197,12 +201,7 @@ export default function Hero() {
             >
               {subtitle}
               {!subtitleDone && (
-                <motion.span
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{ repeat: Infinity, duration: 0.8 }}
-                >
-                  ▋
-                </motion.span>
+                <span style={{ animation: "blink 0.8s infinite" }}>○</span>
               )}
             </p>
           </motion.div>
@@ -278,14 +277,16 @@ export default function Hero() {
             </div>
 
             {/* Floating XP badge */}
-            <motion.div
+            <div
               className="absolute -top-3 -right-3 bg-[#a6ff00] text-[#0d0d0d] font-['Press_Start_2P'] text-[7px] px-2 py-1 rounded-sm"
-              animate={{ y: [0, -3, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              style={{ borderRadius: "4px 2px 6px 3px" }}
+              style={{
+                borderRadius: "4px 2px 6px 3px",
+                animation: "xp-float 2s ease-in-out infinite",
+                willChange: "transform",
+              }}
             >
               +500 XP
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>

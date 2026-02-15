@@ -16,22 +16,26 @@ export default function Nav() {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-
-      // detect active section
-      const sections = navLinks.map((l) => l.href.replace("#", ""));
-      let found = "";
-      for (const id of [...sections].reverse()) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top < 200) {
-          found = id;
-          break;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 50);
+        const sections = navLinks.map((l) => l.href.replace("#", ""));
+        let found = "";
+        for (const id of [...sections].reverse()) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top < 200) {
+            found = id;
+            break;
+          }
         }
-      }
-      setActiveSection(found);
+        setActiveSection(found);
+        ticking = false;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -61,13 +65,12 @@ export default function Nav() {
             <span className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px] hidden sm:inline">
               / portfolio
             </span>
-            <motion.span
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
+            <span
               className="text-[#a6ff00] text-sm"
+              style={{ animation: "blink 1s infinite" }}
             >
-              ▋
-            </motion.span>
+              ○
+            </span>
           </a>
 
           {/* Desktop links */}
