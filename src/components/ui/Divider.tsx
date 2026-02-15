@@ -14,14 +14,17 @@ export default function Divider({
   const isInView = useInView(ref, { once: true, margin: "-20px" });
 
   if (variant === "dots") {
-    const dotCount = 40;
+    const dotCount = 90;
     return (
       <motion.div
         ref={ref}
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="flex justify-between items-center py-8 px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48"
+        className="w-full flex justify-between items-center"
+        style={{
+          padding: "clamp(0.5rem, 1.5vh, 1.5rem) clamp(0.5rem, 1vw, 1rem)",
+        }}
       >
         {[...Array(dotCount)].map((_, i) => (
           <motion.div
@@ -42,14 +45,15 @@ export default function Divider({
   }
 
   if (variant === "arrow") {
-    const arrowCount = 15;
+    const arrowCount = 34;
     return (
       <motion.div
         ref={ref}
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="flex justify-between items-center py-6 px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48"
+        className="w-full flex justify-between items-center"
+        style={{ padding: "clamp(0.4rem, 1vh, 1rem) clamp(0.5rem, 1vw, 1rem)" }}
       >
         {[...Array(arrowCount)].map((_, i) => (
           <motion.span
@@ -77,10 +81,10 @@ export default function Divider({
       initial={{ scaleX: 0 }}
       animate={isInView ? { scaleX: 1 } : {}}
       transition={{ duration: 0.8 }}
-      className="w-full px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48"
+      className="w-full"
     >
       <div
-        className="h-[3px] w-full"
+        className="h-0.75 w-full"
         style={{
           background: `repeating-linear-gradient(90deg, ${color} 0px, ${color} 8px, transparent 8px, transparent 16px)`,
           opacity: 0.25,

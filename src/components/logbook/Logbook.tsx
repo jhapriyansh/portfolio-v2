@@ -3,6 +3,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { fallbackLogEntries, type LogEntryData } from "./logbook.data";
+import { PixelGhost, PixelStar } from "../sprites/PixelSprites";
 
 function timeAgo(dateStr: string): string {
   const now = new Date();
@@ -34,11 +35,20 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
       onClick={() => setExpanded(!expanded)}
       className="cursor-pointer group"
     >
-      <div className="px-6 py-6 transition-all duration-200 hover:bg-[#1a1a2e]/40 border-b border-[#2a2a4a]/40">
+      <div
+        className="transition-all duration-200 hover:bg-[#1a1a2e]/40 border-b border-[#2a2a4a]/40"
+        style={{
+          padding: "clamp(1.2rem, 2.5vh, 2rem) clamp(1.5rem, 3vw, 3rem)",
+        }}
+      >
         {/* Header row */}
-        <div className="flex items-start gap-4">
+        <div
+          className="flex items-start"
+          style={{ gap: "clamp(0.75rem, 1.5vw, 1.5rem)" }}
+        >
           <motion.span
-            className="text-2xl shrink-0 mt-0.5"
+            className="shrink-0 mt-0.5"
+            style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)" }}
             animate={expanded ? { scale: [1, 1.3, 1] } : {}}
             transition={{ duration: 0.3 }}
           >
@@ -46,10 +56,13 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
           </motion.span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-3 mb-2">
-              <h4 className="font-['Press_Start_2P'] text-[10px] text-[#e8e8e8] group-hover:text-[#a6ff00] transition-colors truncate leading-relaxed">
+              <h4
+                className="font-['Press_Start_2P'] text-[#e8e8e8] group-hover:text-[#a6ff00] transition-colors truncate leading-relaxed"
+                style={{ fontSize: "clamp(9px, 1vw, 13px)" }}
+              >
                 {entry.title}
               </h4>
-              <span className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a] shrink-0">
+              <span className="font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] shrink-0">
                 {timeAgo(entry.createdAt)}
               </span>
             </div>
@@ -59,7 +72,7 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
               {entry.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-['Press_Start_2P'] text-[6px] px-2 py-1 bg-[#2a2a4a]/50 text-[#9a9aba] rounded-sm"
+                  className="font-['Press_Start_2P'] text-[7px] px-3 py-1.5 bg-[#2a2a4a]/50 text-[#9a9aba] rounded-sm"
                   style={{ borderRadius: "2px 1px 3px 2px" }}
                 >
                   {tag}
@@ -77,7 +90,10 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <p className="text-[#9a9aba] text-sm leading-relaxed pt-3 border-t border-[#2a2a4a]/50 mt-2">
+                  <p
+                    className="text-[#9a9aba] leading-relaxed pt-3 border-t border-[#2a2a4a]/50 mt-2"
+                    style={{ fontSize: "clamp(0.875rem, 1.1vw, 1.1rem)" }}
+                  >
                     {entry.content}
                   </p>
                 </motion.div>
@@ -134,17 +150,35 @@ export default function Logbook() {
     <section
       ref={sectionRef}
       id="logbook"
-      className="relative py-40 px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 noise-bg overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
-      <div className="relative z-10">
+      <div className="absolute inset-0 pointer-events-none">
+        <PixelGhost
+          className="absolute top-16 right-[8%] w-6 h-6 opacity-20"
+          color="#00f0ff"
+        />
+        <PixelStar
+          className="absolute bottom-20 left-[6%] w-4 h-4 opacity-30"
+          color="#ffc857"
+        />
+      </div>
+
+      <div className="relative z-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-center mb-14"
+          className="text-center pt-4"
+          style={{ marginBottom: "clamp(1rem, 3vh, 3rem)" }}
         >
-          <h2 className="section-heading">Logbook</h2>
-          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px] -mt-8">
+          <h2
+            className="section-heading"
+            style={{ marginBottom: "clamp(0.5rem, 1vh, 1rem)" }}
+          >
+            Logbook
+          </h2>
+          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
             {"// "}what_ive_been_up_to.recent()
           </p>
         </motion.div>
@@ -155,6 +189,7 @@ export default function Logbook() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2 }}
           className="sketch-border bg-[#1a1a2e]/60 overflow-hidden"
+          style={{ minHeight: "clamp(40vh, 55vh, 65vh)" }}
           style={{ borderColor: "#2a2a4a", borderRadius: "8px 4px 10px 6px" }}
         >
           {/* Terminal title bar */}

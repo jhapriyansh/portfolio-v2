@@ -2,6 +2,11 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import {
+  PixelStar,
+  PixelTerminal,
+  PixelDeveloper,
+} from "../sprites/PixelSprites";
 
 export default function Resume() {
   const ref = useRef(null);
@@ -15,18 +20,42 @@ export default function Resume() {
     <section
       ref={ref}
       id="resume"
-      className="relative py-40 px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 noise-bg overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
-      <div className="relative z-10">
+      <div className="absolute inset-0 pointer-events-none">
+        <PixelStar
+          className="absolute top-14 left-[8%] w-4 h-4 opacity-30"
+          color="#ffc857"
+        />
+        <PixelTerminal className="absolute bottom-10 right-[6%] w-28 h-auto opacity-15" />
+        <PixelDeveloper className="absolute top-[28%] right-[8%] w-10 h-10 opacity-20" />
+      </div>
+
+      <div className="relative z-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           className="text-center"
         >
+          <h2
+            className="section-heading"
+            style={{ marginBottom: "clamp(0.5rem, 1vh, 1rem)" }}
+          >
+            Resume
+          </h2>
+          <p
+            className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]"
+            style={{ marginBottom: "clamp(1.5rem, 3vh, 3rem)" }}
+          >
+            {"// "}profile.downloadable()
+          </p>
+
           {/* Resume card */}
           <div
-            className="inline-block bg-[#1a1a2e]/60 p-10 sm:p-14"
+            className="w-full bg-[#1a1a2e]/60"
+            style={{ padding: "clamp(2.5rem, 5vw, 5rem)" }}
             style={{
               border: "3px solid #ffc85740",
               borderRadius: "10px 4px 12px 6px",
@@ -38,10 +67,16 @@ export default function Resume() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 }}
             >
-              <h3 className="font-['Press_Start_2P'] text-sm text-[#ffc857] mb-4">
+              <h3
+                className="font-['Press_Start_2P'] text-[#ffc857] mb-4"
+                style={{ fontSize: "clamp(0.75rem, 1.2vw, 1.1rem)" }}
+              >
                 {">"} Resume
               </h3>
-              <p className="text-[#9a9aba] text-sm leading-relaxed mb-6 max-w-md mx-auto">
+              <p
+                className="text-[#9a9aba] leading-relaxed mb-6"
+                style={{ fontSize: "clamp(0.875rem, 1.1vw, 1.1rem)" }}
+              >
                 Want the full story? View or download my resume for a detailed
                 overview of my experience, projects, and skills.
               </p>
@@ -92,8 +127,8 @@ export default function Resume() {
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.7 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97, y: 1 }}
               className="pixel-btn inline-flex items-center gap-3 text-[10px]"
               style={{
                 background: "#ffc85715",

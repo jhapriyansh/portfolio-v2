@@ -152,7 +152,10 @@ export default function Hero() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 w-full px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 flex flex-col md:flex-row items-center gap-12 pt-20">
+      <div
+        className="relative z-10 w-full flex flex-col md:flex-row items-center justify-center gap-[clamp(2rem,4vw,5rem)] pt-20"
+        style={{ padding: "5vh clamp(2rem, 8vw, 12rem) 0" }}
+      >
         {/* Left: Text */}
         <div className="flex-1 text-center md:text-left">
           {/* Boot sequence line */}
@@ -172,11 +175,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="font-['Press_Start_2P'] text-2xl sm:text-3xl md:text-4xl text-[#e8e8e8] leading-relaxed mb-6"
+            className="font-['Press_Start_2P'] text-[#e8e8e8] leading-relaxed mb-6"
+            style={{ fontSize: "clamp(1.4rem, 3.5vw, 2.5rem)" }}
           >
             <span className="text-[#c77dff]">{"{"}</span> Priyanshu{" "}
-            <span className="text-[#a6ff00] glow-green">Kumar</span> Jha{" "}
-            <span className="text-[#c77dff]">{"}"}</span>
+            <span className="text-[#a6ff00] glow-green">Kumar</span>
+            <br />
+            Jha <span className="text-[#c77dff]">{"}"}</span>
           </motion.h1>
 
           {/* Subtitle typewriter */}
@@ -186,7 +191,10 @@ export default function Hero() {
             transition={{ delay: 1 }}
             className="mb-8"
           >
-            <p className="font-['Press_Start_2P'] text-[10px] sm:text-xs text-[#a6ff00] glow-green">
+            <p
+              className="font-['Press_Start_2P'] text-[#a6ff00] glow-green"
+              style={{ fontSize: "clamp(9px, 1.1vw, 14px)" }}
+            >
               {subtitle}
               {!subtitleDone && (
                 <motion.span
@@ -204,7 +212,8 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 1.8, duration: 0.6 }}
-            className="text-[#9a9aba] text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
+            className="text-[#9a9aba] leading-relaxed mb-8"
+            style={{ fontSize: "clamp(0.875rem, 1.2vw, 1.125rem)" }}
           >
             I build fast, clean web applications with React / Next.js and
             Node.js, with a growing focus on{" "}
@@ -256,7 +265,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.8, rotate: 3 }}
           animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
           transition={{ delay: 1.2, duration: 0.8, type: "spring" }}
-          className="flex-shrink-0 relative"
+          className="shrink-0 relative"
         >
           <div className="sketch-border sketch-border-green bg-[#1a1a2e]/80 p-6 relative">
             {/* Terminal window */}

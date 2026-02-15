@@ -32,10 +32,11 @@ export default function ProjectCard({
       transition={{ delay: index * 0.12, duration: 0.5 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative"
+      className="group relative h-full"
     >
       <div
-        className="relative bg-[#1a1a2e]/60 p-10 sm:p-12 transition-all duration-300 cursor-default"
+        className="relative bg-[#1a1a2e]/60 transition-all duration-300 cursor-default h-full flex flex-col"
+        style={{ padding: "clamp(2rem, 4vw, 4rem)" }}
         style={{
           border: `3px solid ${hovered ? project.color : "#2a2a4a"}`,
           borderRadius: borderRadii[index % borderRadii.length],
@@ -46,7 +47,10 @@ export default function ProjectCard({
         }}
       >
         {/* Type badge */}
-        <div className="flex justify-end mb-5">
+        <div
+          className="flex justify-end"
+          style={{ marginBottom: "clamp(0.75rem, 1.5vh, 1.5rem)" }}
+        >
           <span
             className="font-['Press_Start_2P'] text-[7px] px-3 py-1.5 shrink-0"
             style={{
@@ -61,9 +65,13 @@ export default function ProjectCard({
         </div>
 
         {/* Title & subtitle */}
-        <div className="flex items-start gap-4 mb-6">
+        <div
+          className="flex items-start mb-6"
+          style={{ gap: "clamp(0.75rem, 1.5vw, 1.5rem)" }}
+        >
           <motion.span
-            className="text-3xl shrink-0 mt-0.5"
+            className="shrink-0 mt-0.5"
+            style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)" }}
             animate={hovered ? { rotate: [0, -10, 10, 0] } : {}}
             transition={{ duration: 0.4 }}
           >
@@ -71,28 +79,44 @@ export default function ProjectCard({
           </motion.span>
           <div>
             <h3
-              className="font-['Press_Start_2P'] text-xs sm:text-sm leading-relaxed mb-2"
+              className="font-['Press_Start_2P'] leading-relaxed mb-2"
+              style={{ fontSize: "clamp(0.75rem, 1.2vw, 1.1rem)" }}
               style={{ color: project.color }}
             >
               {project.title}
             </h3>
-            <p className="text-[#5a5a7a] font-mono text-xs leading-relaxed">
+            <p
+              className="text-[#5a5a7a] font-mono leading-relaxed"
+              style={{ fontSize: "clamp(0.8rem, 1vw, 1rem)" }}
+            >
               {project.subtitle}
             </p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-[#9a9aba] text-sm sm:text-base leading-loose mb-8">
+        <p
+          className="text-[#9a9aba] leading-loose"
+          style={{
+            fontSize: "clamp(0.875rem, 1.1vw, 1.1rem)",
+            marginBottom: "clamp(1.5rem, 3vh, 2.5rem)",
+          }}
+        >
           {project.description}
         </p>
 
         {/* Tech tags */}
-        <div className="flex flex-wrap gap-2.5 mb-8">
+        <div
+          className="flex flex-wrap flex-1 content-start"
+          style={{
+            gap: "clamp(0.4rem, 0.8vw, 0.75rem)",
+            marginBottom: "clamp(1.5rem, 3vh, 2.5rem)",
+          }}
+        >
           {project.tech.map((t) => (
             <span
               key={t}
-              className="font-['Press_Start_2P'] text-[7px] px-3 py-1.5 transition-colors duration-200"
+              className="font-['Press_Start_2P'] text-[8px] px-3 py-1.5 transition-colors duration-200"
               style={{
                 background: hovered
                   ? `${project.color}15`
@@ -108,13 +132,19 @@ export default function ProjectCard({
         </div>
 
         {/* Links */}
-        <div className="flex gap-4 pt-2">
+        <div
+          className="flex mt-auto"
+          style={{
+            gap: "clamp(0.75rem, 1.5vw, 1.5rem)",
+            paddingTop: "clamp(0.5rem, 1vh, 1rem)",
+          }}
+        >
           {project.codeUrl && (
             <a
               href={project.codeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:translate-y-[-1px]"
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:-translate-y-px"
               style={{
                 background: `${project.color}10`,
                 color: project.color,
@@ -131,7 +161,7 @@ export default function ProjectCard({
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:translate-y-[-1px]"
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 transition-all duration-200 hover:-translate-y-px"
               style={{
                 background: project.color,
                 color: "#0d0d0d",

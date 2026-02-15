@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "react";
 import { projects as fallbackProjects } from "./projects.data";
 import type { Project } from "./projects.data";
 import ProjectCard from "./ProjectCard";
+import { PixelStar, PixelGhost } from "../sprites/PixelSprites";
 
 export default function Projects() {
   const ref = useRef(null);
@@ -30,22 +31,43 @@ export default function Projects() {
     <section
       ref={ref}
       id="projects"
-      className="relative py-40 px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 pixel-grid noise-bg overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
-      <div className="relative z-10">
+      <div className="absolute inset-0 pointer-events-none">
+        <PixelStar
+          className="absolute top-16 right-[7%] w-4 h-4 opacity-30"
+          color="#00f0ff"
+        />
+        <PixelGhost
+          className="absolute bottom-16 left-[8%] w-6 h-6 opacity-20"
+          color="#ffc857"
+        />
+      </div>
+
+      <div className="relative z-10 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center pt-4"
+          style={{ marginBottom: "clamp(1rem, 3vh, 3rem)" }}
         >
-          <h2 className="section-heading">Projects</h2>
-          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px] -mt-8">
+          <h2
+            className="section-heading"
+            style={{ marginBottom: "clamp(0.5rem, 1vh, 1rem)" }}
+          >
+            Projects
+          </h2>
+          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
             {"// "}quest_log.completed()
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 items-stretch"
+          style={{ gap: "clamp(1.5rem, 3vw, 3rem)" }}
+        >
           {projectList.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}

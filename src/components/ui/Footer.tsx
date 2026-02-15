@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#2a2a4a]/60 bg-[#0d0d0d]">
-      <div className="px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 py-10 flex flex-col items-center gap-3">
+    <footer className="bg-[#0d0d0d]">
+      <div
+        className="w-full flex flex-col items-center gap-3"
+        style={{ padding: "clamp(2rem, 4vh, 4rem) clamp(1.5rem, 6vw, 8rem)" }}
+      >
         <div className="flex items-center gap-2">
           <motion.div
             className="w-1.5 h-1.5 bg-[#a6ff00] rounded-full"

@@ -21,13 +21,15 @@ export default function Nav() {
 
       // detect active section
       const sections = navLinks.map((l) => l.href.replace("#", ""));
-      for (const id of sections.reverse()) {
+      let found = "";
+      for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top < 200) {
-          setActiveSection(id);
+          found = id;
           break;
         }
       }
+      setActiveSection(found);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -45,7 +47,12 @@ export default function Nav() {
             : "bg-transparent"
         }`}
       >
-        <div className="mx-auto px-6 py-4 flex items-center justify-between">
+        <div
+          className="w-full flex items-center justify-between"
+          style={{
+            padding: "clamp(0.8rem, 1.5vh, 1.5rem) clamp(1.5rem, 6vw, 8rem)",
+          }}
+        >
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 group">
             <span className="text-[#a6ff00] font-['Press_Start_2P'] text-xs tracking-wider">
