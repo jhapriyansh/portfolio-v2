@@ -155,6 +155,7 @@ init.sh                       # Database seed script
 - Fix mobile navigation issues (hamburger menu behavior, layout overflows, and viewport scrolling bugs).
 - Enable logging of admin actions (create/update/delete) for audit purposes.
 - View recent visits logs in the admin dashboard.(posthog like)
+- Mouse Pointer Customization (pixelated cursor with hover effects).
 
 ---
 
