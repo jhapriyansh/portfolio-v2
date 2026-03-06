@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import VisitTracker from "@/components/VisitTracker";
+import ClickEffect from "@/components/ClickEffect";
 
 export const metadata: Metadata = {
   title: "Priyanshu Kumar Jha",
@@ -30,7 +32,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="antialiased power-on">{children}</body>
+      <body className="antialiased power-on">
+        <VisitTracker />
+        <ClickEffect />
+        {children}
+      </body>
     </html>
   );
 }

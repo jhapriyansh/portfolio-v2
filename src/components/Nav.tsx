@@ -15,6 +15,18 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -96,8 +108,9 @@ export default function Nav() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
+            className="md:hidden flex flex-col gap-1.5 p-2 z-50 relative"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -124,7 +137,8 @@ export default function Nav() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-[#0d0d0d]/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-40 bg-[#0d0d0d]/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 md:hidden overflow-y-auto overscroll-contain"
+            style={{ touchAction: "none" }}
           >
             {navLinks.map((link, i) => (
               <motion.a

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type Tab = "logbook" | "skills" | "projects" | "settings";
+type Tab = "logbook" | "skills" | "projects" | "audit" | "visits" | "settings";
 
 interface LogEntry {
   _id: string;
@@ -35,6 +35,38 @@ interface ProjectEntry {
   color: string;
   icon: string;
   order: number;
+}
+
+interface AuditLogEntry {
+  _id: string;
+  action: "create" | "update" | "delete";
+  entity: "project" | "skill" | "logbook" | "settings";
+  entityId?: string;
+  description: string;
+  createdAt: string;
+}
+
+interface VisitEntry {
+  _id: string;
+  path: string;
+  referrer?: string;
+  userAgent?: string;
+  createdAt: string;
+}
+
+interface PageCount {
+  _id: string;
+  count: number;
+}
+
+interface DailyCount {
+  _id: string;
+  count: number;
+}
+
+interface ConfirmDialogState {
+  message: string;
+  onConfirm: () => void;
 }
 
 const emojiOptions = [
@@ -113,6 +145,27 @@ export default function AdminPage() {
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
 
+  // ─── Editing state ───
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
+  const [editingLogId, setEditingLogId] = useState<string | null>(null);
+
+  // ─── Confirmation dialog state ───
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState | null>(
+    null,
+  );
+
+  // ─── Audit & Visits state ───
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [auditTotal, setAuditTotal] = useState(0);
+  const [visits, setVisits] = useState<VisitEntry[]>([]);
+  const [visitTotal, setVisitTotal] = useState(0);
+  const [pageCounts, setPageCounts] = useState<PageCount[]>([]);
+  const [dailyCounts, setDailyCounts] = useState<DailyCount[]>([]);
+
+  // ─── Refs for scrolling to form ───
+  const projectFormRef = useRef<HTMLDivElement>(null);
+  const logFormRef = useRef<HTMLDivElement>(null);
+
   /* ──────── check if admin exists ──────── */
   useEffect(() => {
     fetch("/api/auth")
@@ -139,6 +192,42 @@ export default function AdminPage() {
     setProjects(Array.isArray(prRes) ? prRes : []);
   }, []);
 
+  const fetchAuditLogs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, limit: 100 }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAuditLogs(data.logs || []);
+        setAuditTotal(data.total || 0);
+      }
+    } catch {
+      // silent
+    }
+  }, [password]);
+
+  const fetchVisits = useCallback(async () => {
+    try {
+      const res = await fetch("/api/visits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, limit: 200, days: 30 }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVisits(data.visits || []);
+        setVisitTotal(data.total || 0);
+        setPageCounts(data.pageCounts || []);
+        setDailyCounts(data.dailyCounts || []);
+      }
+    } catch {
+      // silent
+    }
+  }, [password]);
+
   /* ──────── auth handlers ──────── */
   async function handleSetup(e: React.FormEvent) {
     e.preventDefault();
@@ -155,6 +244,8 @@ export default function AdminPage() {
         setAdminExists(true);
         setAuthenticated(true);
         await fetchAll();
+        fetchAuditLogs();
+        fetchVisits();
       } else {
         setError(data.error);
       }
@@ -179,6 +270,8 @@ export default function AdminPage() {
       if (res.ok) {
         setAuthenticated(true);
         await fetchAll();
+        fetchAuditLogs();
+        fetchVisits();
       } else {
         setError(data.error);
       }
@@ -196,51 +289,80 @@ export default function AdminPage() {
     setError("");
     setSuccess("");
     try {
+      const isEditing = !!editingLogId;
+      const method = isEditing ? "PUT" : "POST";
+      const body: Record<string, unknown> = {
+        title: logTitle,
+        content: logContent,
+        tags: logTags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+        emoji: logEmoji,
+        password,
+      };
+      if (isEditing) body._id = editingLogId;
+
       const res = await fetch("/api/logbook", {
-        method: "POST",
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: logTitle,
-          content: logContent,
-          tags: logTags
-            .split(",")
-            .map((t) => t.trim())
-            .filter(Boolean),
-          emoji: logEmoji,
-          password,
-        }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
-        setSuccess("Log entry created");
+        setSuccess(isEditing ? "Log entry updated" : "Log entry created");
         setLogTitle("");
         setLogContent("");
         setLogTags("");
         setLogEmoji("📝");
+        setEditingLogId(null);
         await fetchAll();
+        fetchAuditLogs();
       } else {
         const d = await res.json();
         setError(d.error || "Failed");
       }
     } catch {
-      setError("Failed to create entry");
+      setError("Failed to save entry");
     } finally {
       setLoading(false);
     }
   }
 
+  function startEditLog(entry: LogEntry) {
+    setEditingLogId(entry._id);
+    setLogTitle(entry.title);
+    setLogContent(entry.content);
+    setLogTags(entry.tags.join(", "));
+    setLogEmoji(entry.emoji);
+    logFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function cancelEditLog() {
+    setEditingLogId(null);
+    setLogTitle("");
+    setLogContent("");
+    setLogTags("");
+    setLogEmoji("📝");
+  }
+
   async function deleteLogEntry(id: string) {
-    if (!confirm("Delete this log entry?")) return;
-    try {
-      await fetch(
-        `/api/logbook?id=${id}&password=${encodeURIComponent(password)}`,
-        {
-          method: "DELETE",
-        },
-      );
-      await fetchAll();
-    } catch {
-      setError("Delete failed");
-    }
+    setConfirmDialog({
+      message: "Delete this log entry?",
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await fetch("/api/logbook", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, password }),
+          });
+          await fetchAll();
+          fetchAuditLogs();
+        } catch {
+          setError("Delete failed");
+        }
+      },
+    });
   }
 
   /* ──────── CRUD — skills ──────── */
@@ -290,6 +412,7 @@ export default function AdminPage() {
         setSuccess(`Added "${skSkill.trim()}" to ${skTitle}`);
         setSkSkill("");
         await fetchAll();
+        fetchAuditLogs();
       } else {
         const d = await res.json();
         setError(d.error || "Failed");
@@ -302,42 +425,53 @@ export default function AdminPage() {
   }
 
   async function removeSkillItem(categoryId: string, skillName: string) {
-    if (!confirm(`Remove "${skillName}"?`)) return;
-    try {
-      const res = await fetch("/api/skills", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _id: categoryId,
-          removeSkill: skillName,
-          password,
-        }),
-      });
-      if (res.ok) {
-        setSuccess(`Removed "${skillName}"`);
-        await fetchAll();
-      } else {
-        const d = await res.json();
-        setError(d.error || "Failed");
-      }
-    } catch {
-      setError("Delete failed");
-    }
+    setConfirmDialog({
+      message: `Remove "${skillName}"?`,
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          const res = await fetch("/api/skills", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              _id: categoryId,
+              removeSkill: skillName,
+              password,
+            }),
+          });
+          if (res.ok) {
+            setSuccess(`Removed "${skillName}"`);
+            await fetchAll();
+            fetchAuditLogs();
+          } else {
+            const d = await res.json();
+            setError(d.error || "Failed");
+          }
+        } catch {
+          setError("Delete failed");
+        }
+      },
+    });
   }
 
   async function deleteSkill(id: string) {
-    if (!confirm("Delete this entire skill category?")) return;
-    try {
-      await fetch(
-        `/api/skills?id=${id}&password=${encodeURIComponent(password)}`,
-        {
-          method: "DELETE",
-        },
-      );
-      await fetchAll();
-    } catch {
-      setError("Delete failed");
-    }
+    setConfirmDialog({
+      message: "Delete this entire skill category?",
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await fetch("/api/skills", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, password }),
+          });
+          await fetchAll();
+          fetchAuditLogs();
+        } catch {
+          setError("Delete failed");
+        }
+      },
+    });
   }
 
   /* ──────── CRUD — projects ──────── */
@@ -347,28 +481,33 @@ export default function AdminPage() {
     setError("");
     setSuccess("");
     try {
+      const isEditing = !!editingProjectId;
+      const method = isEditing ? "PUT" : "POST";
+      const body: Record<string, unknown> = {
+        title: pTitle,
+        subtitle: pSubtitle,
+        type: pType,
+        description: pDesc,
+        tech: pTech
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+        codeUrl: pCodeUrl || undefined,
+        liveUrl: pLiveUrl || undefined,
+        color: pColor,
+        icon: pIcon,
+        order: pOrder,
+        password,
+      };
+      if (isEditing) body._id = editingProjectId;
+
       const res = await fetch("/api/projects", {
-        method: "POST",
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: pTitle,
-          subtitle: pSubtitle,
-          type: pType,
-          description: pDesc,
-          tech: pTech
-            .split(",")
-            .map((t) => t.trim())
-            .filter(Boolean),
-          codeUrl: pCodeUrl || undefined,
-          liveUrl: pLiveUrl || undefined,
-          color: pColor,
-          icon: pIcon,
-          order: pOrder,
-          password,
-        }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
-        setSuccess("Project created");
+        setSuccess(isEditing ? "Project updated" : "Project created");
         setPTitle("");
         setPSubtitle("");
         setPDesc("");
@@ -377,31 +516,68 @@ export default function AdminPage() {
         setPLiveUrl("");
         setPIcon("📦");
         setPOrder(0);
+        setEditingProjectId(null);
         await fetchAll();
+        fetchAuditLogs();
       } else {
         const d = await res.json();
         setError(d.error || "Failed");
       }
     } catch {
-      setError("Failed to create project");
+      setError("Failed to save project");
     } finally {
       setLoading(false);
     }
   }
 
+  function startEditProject(proj: ProjectEntry) {
+    setEditingProjectId(proj._id);
+    setPTitle(proj.title);
+    setPSubtitle(proj.subtitle);
+    setPType(proj.type);
+    setPDesc(proj.description);
+    setPTech(proj.tech.join(", "));
+    setPCodeUrl(proj.codeUrl || "");
+    setPLiveUrl(proj.liveUrl || "");
+    setPColor(proj.color);
+    setPIcon(proj.icon);
+    setPOrder(proj.order);
+    projectFormRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  function cancelEditProject() {
+    setEditingProjectId(null);
+    setPTitle("");
+    setPSubtitle("");
+    setPDesc("");
+    setPTech("");
+    setPCodeUrl("");
+    setPLiveUrl("");
+    setPIcon("📦");
+    setPOrder(0);
+  }
+
   async function deleteProject(id: string) {
-    if (!confirm("Delete this project?")) return;
-    try {
-      await fetch(
-        `/api/projects?id=${id}&password=${encodeURIComponent(password)}`,
-        {
-          method: "DELETE",
-        },
-      );
-      await fetchAll();
-    } catch {
-      setError("Delete failed");
-    }
+    setConfirmDialog({
+      message: "Delete this project?",
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await fetch("/api/projects", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, password }),
+          });
+          await fetchAll();
+          fetchAuditLogs();
+        } catch {
+          setError("Delete failed");
+        }
+      },
+    });
   }
 
   /* ──────── change password ──────── */
@@ -515,6 +691,8 @@ export default function AdminPage() {
     { key: "logbook", label: "Logbook" },
     { key: "skills", label: "Skills" },
     { key: "projects", label: "Projects" },
+    { key: "audit", label: "Audit" },
+    { key: "visits", label: "Visits" },
     { key: "settings", label: "Settings" },
   ];
 
@@ -538,7 +716,11 @@ export default function AdminPage() {
           {tabs.map((t) => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key)}
+              onClick={() => {
+                setTab(t.key);
+                if (t.key === "audit") fetchAuditLogs();
+                if (t.key === "visits") fetchVisits();
+              }}
               className={`font-['Press_Start_2P'] text-[8px] px-6 py-4 transition-colors border-b-2 ${
                 tab === t.key
                   ? "text-[#a6ff00] border-[#a6ff00]"
@@ -552,6 +734,51 @@ export default function AdminPage() {
       </div>
 
       <div className="px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48 py-12">
+        {/* Confirmation Dialog */}
+        <AnimatePresence>
+          {confirmDialog && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+              onClick={() => setConfirmDialog(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-[#1a1a2e] p-8 max-w-sm w-full mx-4"
+                style={{
+                  border: "3px solid #ff4757",
+                  borderRadius: "10px 4px 12px 6px",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="font-['Press_Start_2P'] text-[9px] text-[#e8e8e8] mb-6 text-center leading-relaxed">
+                  {confirmDialog.message}
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => setConfirmDialog(null)}
+                    className="font-['Press_Start_2P'] text-[8px] px-4 py-2 border-2 border-[#5a5a7a] text-[#9a9aba] hover:border-[#9a9aba] hover:text-[#e8e8e8] transition-colors"
+                    style={{ borderRadius: "4px 2px 6px 3px" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDialog.onConfirm}
+                    className="font-['Press_Start_2P'] text-[8px] px-4 py-2 bg-[#ff4757] text-[#0d0d0d] border-2 border-[#ff4757] hover:bg-[#ff6b81] transition-colors"
+                    style={{ borderRadius: "4px 2px 6px 3px" }}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Alerts */}
         <AnimatePresence>
           {success && (
@@ -581,17 +808,28 @@ export default function AdminPage() {
         {/* ──── TAB: LOGBOOK ──── */}
         {tab === "logbook" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Create form */}
+            {/* Create/Edit form */}
             <div
+              ref={logFormRef}
               className="bg-[#1a1a2e]/60 p-8"
               style={{
-                border: "3px solid #2a2a4a",
+                border: `3px solid ${editingLogId ? "#ffc857" : "#2a2a4a"}`,
                 borderRadius: "10px 4px 12px 6px",
               }}
             >
-              <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff] mb-6">
-                + New Log Entry
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff]">
+                  {editingLogId ? "✎ Edit Log Entry" : "+ New Log Entry"}
+                </h2>
+                {editingLogId && (
+                  <button
+                    onClick={cancelEditLog}
+                    className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] hover:text-[#e8e8e8] transition-colors"
+                  >
+                    ✕ Cancel
+                  </button>
+                )}
+              </div>
               <form onSubmit={createLogEntry} className="space-y-5">
                 <div>
                   <label className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] block mb-2">
@@ -662,7 +900,11 @@ export default function AdminPage() {
                   disabled={loading}
                   className="pixel-btn w-full"
                 >
-                  {loading ? "Creating..." : "Create Entry"}
+                  {loading
+                    ? "Saving..."
+                    : editingLogId
+                      ? "Update Entry"
+                      : "Create Entry"}
                 </button>
               </form>
             </div>
@@ -695,6 +937,13 @@ export default function AdminPage() {
                         style={{ borderRadius: "3px" }}
                       >
                         DEL
+                      </button>
+                      <button
+                        onClick={() => startEditLog(entry)}
+                        className="font-['Press_Start_2P'] text-[7px] text-[#ffc857] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 hover:bg-[#ffc857]/10 px-2 py-1"
+                        style={{ borderRadius: "3px" }}
+                      >
+                        EDIT
                       </button>
                     </div>
                     <p className="text-[#9a9aba] text-[11px] leading-relaxed line-clamp-2">
@@ -767,7 +1016,6 @@ export default function AdminPage() {
                       className={inputClass}
                       style={inputStyle}
                       placeholder="⌨️"
-                      disabled={skIsExisting}
                     />
                   </div>
                   <div>
@@ -779,7 +1027,6 @@ export default function AdminPage() {
                       onChange={(e) => setSkColor(e.target.value)}
                       className={inputClass}
                       style={inputStyle}
-                      disabled={skIsExisting}
                     >
                       {colorOptions.map((c) => (
                         <option key={c.value} value={c.value}>
@@ -813,7 +1060,6 @@ export default function AdminPage() {
                     onChange={(e) => setSkOrder(Number(e.target.value))}
                     className={inputClass}
                     style={inputStyle}
-                    disabled={skIsExisting}
                   />
                 </div>
                 <button
@@ -899,15 +1145,26 @@ export default function AdminPage() {
         {tab === "projects" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div
+              ref={projectFormRef}
               className="bg-[#1a1a2e]/60 p-8"
               style={{
-                border: "3px solid #2a2a4a",
+                border: `3px solid ${editingProjectId ? "#ffc857" : "#2a2a4a"}`,
                 borderRadius: "10px 4px 12px 6px",
               }}
             >
-              <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff] mb-6">
-                + New Project
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff]">
+                  {editingProjectId ? "✎ Edit Project" : "+ New Project"}
+                </h2>
+                {editingProjectId && (
+                  <button
+                    onClick={cancelEditProject}
+                    className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] hover:text-[#e8e8e8] transition-colors"
+                  >
+                    ✕ Cancel
+                  </button>
+                )}
+              </div>
               <form onSubmit={createProject} className="space-y-5">
                 <div>
                   <label className="font-['Press_Start_2P'] text-[7px] text-[#9a9aba] block mb-2">
@@ -1060,7 +1317,11 @@ export default function AdminPage() {
                   disabled={loading}
                   className="pixel-btn w-full"
                 >
-                  {loading ? "Creating..." : "Create Project"}
+                  {loading
+                    ? "Saving..."
+                    : editingProjectId
+                      ? "Update Project"
+                      : "Create Project"}
                 </button>
               </form>
             </div>
@@ -1099,6 +1360,13 @@ export default function AdminPage() {
                       >
                         DEL
                       </button>
+                      <button
+                        onClick={() => startEditProject(proj)}
+                        className="font-['Press_Start_2P'] text-[7px] text-[#ffc857] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 hover:bg-[#ffc857]/10 px-2 py-1"
+                        style={{ borderRadius: "3px" }}
+                      >
+                        EDIT
+                      </button>
                     </div>
                     <p className="text-[#9a9aba] text-[11px] leading-relaxed line-clamp-2">
                       {proj.description}
@@ -1108,6 +1376,214 @@ export default function AdminPage() {
                 {projects.length === 0 && (
                   <p className="font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] text-center py-8">
                     No projects. They&apos;ll use fallback data.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ──── TAB: AUDIT ──── */}
+        {tab === "audit" && (
+          <div>
+            <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff] mb-6 text-center">
+              Audit Log ({auditTotal} total)
+            </h2>
+            <div
+              className="bg-[#1a1a2e]/60 p-6 max-h-[700px] overflow-y-auto"
+              style={{
+                border: "3px solid #2a2a4a",
+                borderRadius: "10px 4px 12px 6px",
+              }}
+            >
+              {auditLogs.length === 0 && (
+                <p className="font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] text-center py-8">
+                  No audit logs yet. Actions will be recorded here.
+                </p>
+              )}
+              <div className="space-y-2">
+                {auditLogs.map((log) => (
+                  <div
+                    key={log._id}
+                    className="flex items-start gap-3 p-3 hover:bg-[#2a2a4a]/30 transition-colors"
+                    style={{
+                      border: "1px solid #2a2a4a",
+                      borderRadius: "4px 2px 6px 3px",
+                    }}
+                  >
+                    <span
+                      className="font-['Press_Start_2P'] text-[7px] px-2 py-1 shrink-0"
+                      style={{
+                        background:
+                          log.action === "create"
+                            ? "#a6ff0020"
+                            : log.action === "update"
+                              ? "#ffc85720"
+                              : "#ff475720",
+                        color:
+                          log.action === "create"
+                            ? "#a6ff00"
+                            : log.action === "update"
+                              ? "#ffc857"
+                              : "#ff4757",
+                        border: `1px solid ${
+                          log.action === "create"
+                            ? "#a6ff0040"
+                            : log.action === "update"
+                              ? "#ffc85740"
+                              : "#ff475740"
+                        }`,
+                        borderRadius: "2px",
+                      }}
+                    >
+                      {log.action.toUpperCase()}
+                    </span>
+                    <span
+                      className="font-['Press_Start_2P'] text-[6px] text-[#00f0ff] px-1.5 py-1 bg-[#00f0ff10] shrink-0"
+                      style={{
+                        border: "1px solid #00f0ff30",
+                        borderRadius: "2px",
+                      }}
+                    >
+                      {log.entity}
+                    </span>
+                    <span className="text-[#e8e8e8] text-[11px] font-mono flex-1">
+                      {log.description}
+                    </span>
+                    <span className="text-[#5a5a7a] text-[10px] font-mono shrink-0">
+                      {new Date(log.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ──── TAB: VISITS ──── */}
+        {tab === "visits" && (
+          <div className="space-y-8">
+            <h2 className="font-['Press_Start_2P'] text-[10px] text-[#c77dff] text-center">
+              Visits — Last 30 Days ({visitTotal} total)
+            </h2>
+
+            {/* Stats grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Page views */}
+              <div
+                className="bg-[#1a1a2e]/60 p-6"
+                style={{
+                  border: "3px solid #2a2a4a",
+                  borderRadius: "10px 4px 12px 6px",
+                }}
+              >
+                <h3 className="font-['Press_Start_2P'] text-[8px] text-[#a6ff00] mb-4">
+                  Top Pages
+                </h3>
+                <div className="space-y-2">
+                  {pageCounts.map((pc) => (
+                    <div
+                      key={pc._id}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-[#e8e8e8] text-[11px] font-mono truncate mr-2">
+                        {pc._id}
+                      </span>
+                      <span className="font-['Press_Start_2P'] text-[7px] text-[#a6ff00]">
+                        {pc.count}
+                      </span>
+                    </div>
+                  ))}
+                  {pageCounts.length === 0 && (
+                    <p className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
+                      No data yet
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Daily activity */}
+              <div
+                className="bg-[#1a1a2e]/60 p-6 md:col-span-2"
+                style={{
+                  border: "3px solid #2a2a4a",
+                  borderRadius: "10px 4px 12px 6px",
+                }}
+              >
+                <h3 className="font-['Press_Start_2P'] text-[8px] text-[#a6ff00] mb-4">
+                  Daily Activity
+                </h3>
+                {dailyCounts.length > 0 ? (
+                  <div className="flex items-end gap-1 h-32">
+                    {dailyCounts.map((dc) => {
+                      const maxCount = Math.max(
+                        ...dailyCounts.map((d) => d.count),
+                        1,
+                      );
+                      const height = Math.max((dc.count / maxCount) * 100, 4);
+                      return (
+                        <div
+                          key={dc._id}
+                          className="flex-1 flex flex-col items-center gap-1"
+                        >
+                          <span className="font-['Press_Start_2P'] text-[5px] text-[#9a9aba]">
+                            {dc.count}
+                          </span>
+                          <div
+                            className="w-full bg-[#a6ff00] transition-all"
+                            style={{
+                              height: `${height}%`,
+                              minHeight: "4px",
+                              borderRadius: "2px 2px 0 0",
+                              opacity: 0.8,
+                            }}
+                          />
+                          <span className="font-['Press_Start_2P'] text-[4px] text-[#5a5a7a] -rotate-45 origin-top-left mt-1">
+                            {dc._id.slice(5)}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
+                    No data yet
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Recent visits table */}
+            <div
+              className="bg-[#1a1a2e]/60 p-6 max-h-[400px] overflow-y-auto"
+              style={{
+                border: "3px solid #2a2a4a",
+                borderRadius: "10px 4px 12px 6px",
+              }}
+            >
+              <h3 className="font-['Press_Start_2P'] text-[8px] text-[#a6ff00] mb-4">
+                Recent Visits
+              </h3>
+              <div className="space-y-1">
+                {visits.slice(0, 50).map((v) => (
+                  <div
+                    key={v._id}
+                    className="flex items-center gap-4 px-2 py-1.5 hover:bg-[#2a2a4a]/20 transition-colors text-[11px] font-mono"
+                  >
+                    <span className="text-[#a6ff00] w-16 shrink-0">
+                      {v.path}
+                    </span>
+                    <span className="text-[#5a5a7a] truncate flex-1">
+                      {v.referrer || "—"}
+                    </span>
+                    <span className="text-[#5a5a7a] shrink-0">
+                      {new Date(v.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+                {visits.length === 0 && (
+                  <p className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a] text-center py-4">
+                    No visits recorded yet
                   </p>
                 )}
               </div>

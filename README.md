@@ -17,7 +17,7 @@ An **8-bit retro-themed** developer portfolio built with Next.js, featuring CRT 
 - **Neon glow** — multi-layer text shadows in acid green, purple, pink, cyan, amber
 - **Fully responsive** — `clamp()` based sizing, no hard breakpoints or `max-w-*` wrappers
 - **Dynamic content** — Skills, Projects & Logbook sections fetch from MongoDB with graceful fallbacks
-- **Admin panel** — Password-protected CRUD dashboard at `/admin`
+- **Admin panel** — Password-protected CRUD dashboard at `/admin` with audit logging and visit analytics
 - **Framer Motion** — entrance animations, hover effects, tab transitions
 - **Seed script** — one-command database population
 
@@ -105,57 +105,12 @@ Navigate to `/admin` to access the dashboard. On first visit, you'll be prompted
 
 | Tab          | Capabilities                                                                                        |
 | ------------ | --------------------------------------------------------------------------------------------------- |
-| **Logbook**  | Create/delete log entries (title, content, tags, emoji)                                             |
+| **Logbook**  | Create, edit, and delete log entries (title, content, tags, emoji)                                  |
 | **Skills**   | Add skills to existing categories or create new ones; delete individual skills or entire categories |
 | **Projects** | Full CRUD for projects (title, subtitle, type, description, tech, URLs, color, icon, order)         |
-| **Settings** | Admin settings                                                                                      |
-
----
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── page.tsx              # Main page (all sections)
-│   ├── layout.tsx            # Root layout, fonts, metadata
-│   ├── globals.css           # Theme, CRT effects, pixel-btn, neon glow
-│   ├── admin/page.tsx        # Admin dashboard
-│   └── api/
-│       ├── auth/route.ts     # Admin login/register
-│       ├── skills/route.ts   # Skills CRUD (upsert support)
-│       ├── projects/route.ts # Projects CRUD
-│       └── logbook/route.ts  # Logbook CRUD
-├── components/
-│   ├── Nav.tsx
-│   ├── hero/Hero.tsx
-│   ├── skills/Skills.tsx
-│   ├── projects/Projects.tsx, ProjectCard.tsx, projects.data.ts
-│   ├── logbook/Logbook.tsx, logbook.data.ts
-│   ├── resume/Resume.tsx
-│   ├── contact/Contact.tsx
-│   ├── sprites/PixelSprites.tsx
-│   └── ui/Divider.tsx, Footer.tsx
-├── lib/
-│   ├── mongodb.ts            # Mongoose connection
-│   ├── AdminUser.ts          # Admin model
-│   ├── SkillCategory.ts      # Skills model
-│   ├── Project.ts            # Project model
-│   └── LogEntry.ts           # Log entry model
-init.sh                       # Database seed script
-```
-
----
-
-## 🔮 Future Work
-
-- Enable editing of existing projects from the admin panel.
-- Enable editing of existing skills and skill categories.
-- Improve admin UX with inline edits and confirmations.
-- Fix mobile navigation issues (hamburger menu behavior, layout overflows, and viewport scrolling bugs).
-- Enable logging of admin actions (create/update/delete) for audit purposes.
-- View recent visits logs in the admin dashboard.(posthog like)
-- Mouse Pointer Customization (pixelated cursor with hover effects).
+| **Audit**    | Chronological log of all admin actions (create/update/delete) with entity tags and timestamps       |
+| **Visits**   | Page view analytics — top pages, daily activity bar chart, and recent visit table (last 30 days)    |
+| **Settings** | Change admin password                                                                               |
 
 ---
 

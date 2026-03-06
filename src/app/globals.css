@@ -41,7 +41,6 @@ body {
   color: var(--text-primary);
   font-family: var(--font-mono);
   overflow-x: hidden;
-  cursor: default;
 }
 
 /* ─── CUSTOM SCROLLBAR ─── */
@@ -477,4 +476,31 @@ section[id] {
 }
 .glitch-hover:hover {
   animation: glitch 0.3s ease infinite;
+}
+
+/* ─── (cursors use browser defaults) ─── */
+
+/* ─── PIXEL CLICK EFFECT ─── */
+@keyframes pixel-line-spread {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+.pixel-click-line {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 2px;
+  height: 18px;
+  background: var(--acid-green);
+  image-rendering: pixelated;
+  animation: pixel-line-spread 0.35s ease-out forwards;
 }
