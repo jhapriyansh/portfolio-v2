@@ -114,6 +114,12 @@ Navigate to `/admin` to access the dashboard. On first visit, you'll be prompted
 
 ---
 
-## 📜 License
+## � Future Work
+
+- **Responsive Design** — Mobile devices reponsivity (Hamburger menu, overflow handling)
+
+---
+
+##  License
 
 MIT
