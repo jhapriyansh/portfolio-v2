@@ -205,10 +205,7 @@ export default function Skills() {
             <span className="text-[#ffc857]">easy to use</span>. I care deeply
             about UI and developer experience, dig into{" "}
             <span className="text-[#00f0ff]">systems</span> and{" "}
-            <span className="text-[#ff6b6b]">OS internals</span>, and I’m
-            gradually bringing{" "}
-            <span className="text-[#b8f2e6]">deep learning</span> into the stack
-            where it makes sense.
+            <span className="text-[#ff6b6b]">OS internals</span>, 
           </p>
         </motion.div>
 

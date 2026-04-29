@@ -6,7 +6,7 @@ import ClickEffect from "@/components/ClickEffect";
 export const metadata: Metadata = {
   title: "Priyanshu Kumar Jha",
   description:
-    "Full-stack developer obsessed with clean UI, performance, and scalable systems. Building with React/Next.js while learning deep learning and exploring OS internals & WebAssembly.",
+    "Full-stack developer obsessed with clean UI, performance, and scalable systems. Building with React/Next.js while learning and exploring OS internals & WebAssembly.",
   keywords: [
     "Priyanshu Kumar Jha",
     "full stack developer",
