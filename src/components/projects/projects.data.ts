@@ -1,7 +1,7 @@
 export interface Project {
   title: string;
   subtitle: string;
-  type: "Full Stack" | "Frontend" | "Backend";
+  type: "Full Stack" | "Frontend" | "Backend" | "Systems" | "Embedded Systems";
   description: string;
   tech: string[];
   codeUrl?: string;

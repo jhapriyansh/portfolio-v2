@@ -27,7 +27,7 @@ interface ProjectEntry {
   _id: string;
   title: string;
   subtitle: string;
-  type: "Full Stack" | "Frontend" | "Backend";
+  type: "Full Stack" | "Frontend" | "Backend" | "Systems" | "Embedded Systems";
   description: string;
   tech: string[];
   codeUrl?: string;
@@ -130,7 +130,7 @@ export default function AdminPage() {
   const [projects, setProjects] = useState<ProjectEntry[]>([]);
   const [pTitle, setPTitle] = useState("");
   const [pSubtitle, setPSubtitle] = useState("");
-  const [pType, setPType] = useState<"Full Stack" | "Frontend" | "Backend">(
+  const [pType, setPType] = useState<"Full Stack" | "Frontend" | "Backend" | "Systems" | "Embedded Systems">(
     "Full Stack",
   );
   const [pDesc, setPDesc] = useState("");
@@ -1210,6 +1210,8 @@ export default function AdminPage() {
                       <option value="Full Stack">Full Stack</option>
                       <option value="Frontend">Frontend</option>
                       <option value="Backend">Backend</option>
+                      <option value="Systems">Systems</option>
+                      <option value="Emebedded Systems">Embedded Systems</option>
                     </select>
                   </div>
                   <div>

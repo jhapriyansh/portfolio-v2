@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IProject extends Document {
   title: string;
   subtitle: string;
-  type: "Full Stack" | "Frontend" | "Backend";
+  type: "Full Stack" | "Frontend" | "Backend" | "Systems" | "Embedded Systems";
   description: string;
   tech: string[];
   codeUrl?: string;
@@ -19,7 +19,7 @@ const ProjectSchema = new Schema<IProject>(
     subtitle: { type: String, required: true },
     type: {
       type: String,
-      enum: ["Full Stack", "Frontend", "Backend"],
+      enum: ["Full Stack", "Frontend", "Backend", "Systems", "Embedded Systems"],
       default: "Full Stack",
     },
     description: { type: String, required: true },
