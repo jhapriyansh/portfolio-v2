@@ -167,10 +167,9 @@ export default function Hero() {
             I build fast, clean web applications with React / Next.js and
             Node.js. Lately, I’m diving into{" "}
             <span className="text-[#c77dff]">systems</span>,{" "}
-            <span className="text-[#00f0ff]">OS internals</span>,{" "}
-            <span className="text-[#ffc857]">WebAssembly</span>, and{" "}
-            <span className="text-[#ff6b6b]">deep learning</span> to push
-            browser performance further.
+            <span className="text-[#00f0ff]">OS internals</span> and{" "}
+            <span className="text-[#ffc857]">WebAssembly</span>  to push browser
+            performance further.
           </motion.p>
 
           {/* Tags spacer */}
