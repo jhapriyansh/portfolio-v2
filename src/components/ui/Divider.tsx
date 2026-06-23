@@ -21,7 +21,7 @@ export default function Divider({
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="w-full flex justify-between items-center"
+        className="pixel-divider-dots w-full flex justify-between items-center"
         style={{
           padding: "clamp(0.5rem, 1.5vh, 1.5rem) clamp(0.5rem, 1vw, 1rem)",
         }}
@@ -51,7 +51,7 @@ export default function Divider({
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5 }}
-        className="w-full flex justify-between items-center"
+        className="pixel-divider-arrows w-full flex justify-between items-center"
         style={{ padding: "clamp(0.4rem, 1vh, 1rem) clamp(0.5rem, 1vw, 1rem)" }}
       >
         {[...Array(arrowCount)].map((_, i) => (

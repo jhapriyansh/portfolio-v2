@@ -19,7 +19,7 @@ export default function Resume() {
     <section
       ref={ref}
       id="resume"
-      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      className="site-section relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
       style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -45,7 +45,7 @@ export default function Resume() {
             Resume
           </h2>
           <p
-            className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]"
+            className="section-kicker text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]"
             style={{ marginBottom: "clamp(1.5rem, 3vh, 3rem)" }}
           >
             {"// "}profile.downloadable()
@@ -53,7 +53,7 @@ export default function Resume() {
 
           {/* Resume card */}
           <div
-            className="w-full bg-[#1a1a2e]/60"
+            className="resume-card w-full bg-[#1a1a2e]/60"
             style={{
               padding: "clamp(2.5rem, 5vw, 5rem)",
               border: "3px solid #ffc85740",
@@ -143,7 +143,7 @@ export default function Resume() {
                 boxShadow: "0px 0px 0px #ffc85730",
                 transition: { duration: 0.1, delay: 0 },
               }}
-              className="font-['Press_Start_2P'] cursor-pointer inline-flex items-center gap-4"
+              className="resume-button font-['Press_Start_2P'] cursor-pointer inline-flex items-center gap-4"
               style={{
                 marginTop: "clamp(1.5rem, 3vh, 3rem)",
                 fontSize: "clamp(11px, 1.2vw, 14px)",

@@ -20,7 +20,7 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center pixel-grid noise-bg scanlines overflow-hidden"
+      className="hero-section relative min-h-screen flex items-center justify-center pixel-grid noise-bg scanlines overflow-hidden"
     >
       {/* Floating pixel decorations — dense scatter */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -99,7 +99,7 @@ export default function Hero() {
 
         {/* Large decorative gamepad */}
         <div
-          className="absolute -right-4 top-[20%] opacity-[0.08]"
+          className="decorative-gamepad absolute -right-4 top-[20%] opacity-[0.08]"
           style={{
             animation: "gamepad-rock-right 6s ease-in-out infinite",
             willChange: "transform",
@@ -110,7 +110,7 @@ export default function Hero() {
 
         {/* Second gamepad on left */}
         <div
-          className="absolute -left-8 bottom-[15%] opacity-[0.05]"
+          className="decorative-gamepad absolute -left-8 bottom-[15%] opacity-[0.05]"
           style={{
             animation: "gamepad-rock-left 8s ease-in-out infinite",
             willChange: "transform",
@@ -122,11 +122,11 @@ export default function Hero() {
 
       {/* Main content */}
       <div
-        className="relative z-10 w-full flex flex-col md:flex-row items-center justify-center gap-[clamp(2rem,4vw,5rem)] pt-20"
+        className="hero-content relative z-10 w-full flex flex-col lg:flex-row items-center justify-center gap-[clamp(2rem,4vw,5rem)] pt-20"
         style={{ padding: "5vh clamp(2rem, 8vw, 12rem) 0" }}
       >
         {/* Left: Text */}
-        <div className="flex-1 text-center md:text-left">
+        <div className="hero-copy flex-1 text-center lg:text-left">
           {/* Boot sequence line */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -134,7 +134,7 @@ export default function Hero() {
             transition={{ delay: 0.3 }}
             className="mb-4"
           >
-            <span className="font-['Press_Start_2P'] text-[9px] text-[#5a5a7a] tracking-widest">
+            <span className="hero-boot font-['Press_Start_2P'] text-[9px] text-[#5a5a7a] tracking-widest">
               {">"} SYSTEM.boot() — v2.0.0
             </span>
           </motion.div>
@@ -144,7 +144,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="font-['Press_Start_2P'] text-[#e8e8e8] leading-relaxed mb-6"
+            className="hero-title font-['Press_Start_2P'] text-[#e8e8e8] leading-relaxed mb-6"
             style={{ fontSize: "clamp(1.4rem, 3.5vw, 2.5rem)" }}
           >
             <span className="text-[#c77dff]">{"{"}</span> Priyanshu{" "}
@@ -161,7 +161,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 1.8, duration: 0.6 }}
-            className="text-[#9a9aba] leading-relaxed mb-8"
+            className="hero-description text-[#9a9aba] leading-relaxed mb-8"
             style={{ fontSize: "clamp(0.875rem, 1.2vw, 1.125rem)" }}
           >
             I build fast, clean web applications with React / Next.js and
@@ -180,7 +180,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 2.8 }}
-            className="flex flex-wrap gap-4 justify-center md:justify-start"
+            className="hero-actions flex flex-wrap gap-4 justify-center lg:justify-start"
           >
             <a href="#projects" className="pixel-btn">
               View Projects
@@ -196,14 +196,14 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.8, rotate: 3 }}
           animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
           transition={{ delay: 1.2, duration: 0.8, type: "spring" }}
-          className="shrink-0 relative"
+          className="hero-visual shrink-0 relative"
         >
-          <div className="sketch-border sketch-border-green bg-[#1a1a2e]/80 p-6 relative">
+          <div className="hero-terminal-card sketch-border sketch-border-green bg-[#1a1a2e]/80 p-6 relative">
             {/* Terminal window */}
-            <PixelTerminal className="w-56 sm:w-72 h-auto" />
+            <PixelTerminal className="hero-terminal-svg w-56 sm:w-72 h-auto" />
 
             {/* Developer character sitting in front */}
-            <div className="absolute -bottom-6 -right-4">
+            <div className="hero-developer absolute -bottom-6 -right-4">
               <PixelDeveloper className="w-16 h-16" />
             </div>
 
@@ -224,7 +224,7 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="hero-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.5 }}

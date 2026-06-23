@@ -35,7 +35,7 @@ export default function ProjectCard({
       className="group relative h-full"
     >
       <div
-        className="relative bg-[#1a1a2e]/60 transition-all duration-300 cursor-default h-full flex flex-col"
+        className="project-card-shell relative bg-[#1a1a2e]/60 transition-all duration-300 cursor-default h-full flex flex-col"
         style={{
           padding: "clamp(2rem, 4vw, 4rem)",
           border: `3px solid ${hovered ? project.color : "#2a2a4a"}`,
@@ -66,7 +66,7 @@ export default function ProjectCard({
 
         {/* Title & subtitle */}
         <div
-          className="flex items-start mb-6"
+          className="project-title-row flex items-start mb-6"
           style={{ gap: "clamp(0.75rem, 1.5vw, 1.5rem)" }}
         >
           <motion.span
@@ -79,7 +79,7 @@ export default function ProjectCard({
           </motion.span>
           <div>
             <h3
-              className="font-['Press_Start_2P'] leading-relaxed mb-2"
+              className="project-title font-['Press_Start_2P'] leading-relaxed mb-2"
               style={{
                 fontSize: "clamp(0.75rem, 1.2vw, 1.1rem)",
                 color: project.color,
@@ -98,7 +98,7 @@ export default function ProjectCard({
 
         {/* Description */}
         <p
-          className="text-[#9a9aba] leading-loose"
+          className="project-description text-[#9a9aba] leading-loose"
           style={{
             fontSize: "clamp(0.875rem, 1.1vw, 1.1rem)",
             marginBottom: "clamp(1.5rem, 3vh, 2.5rem)",
@@ -118,7 +118,7 @@ export default function ProjectCard({
           {project.tech.map((t) => (
             <span
               key={t}
-              className="font-['Press_Start_2P'] text-[8px] px-3 py-1.5 transition-colors duration-200"
+              className="project-tag font-['Press_Start_2P'] text-[8px] px-3 py-1.5 transition-colors duration-200"
               style={{
                 background: hovered
                   ? `${project.color}15`
@@ -135,7 +135,7 @@ export default function ProjectCard({
 
         {/* Links */}
         <div
-          className="flex mt-auto"
+          className="project-card-actions flex mt-auto"
           style={{
             gap: "clamp(0.75rem, 1.5vw, 1.5rem)",
             paddingTop: "clamp(0.5rem, 1vh, 1rem)",
@@ -156,7 +156,7 @@ export default function ProjectCard({
                 x: 2,
                 boxShadow: `0px 0px 0px ${project.color}30`,
               }}
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer"
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer inline-flex items-center justify-center"
               style={{
                 background: `${project.color}10`,
                 color: project.color,
@@ -185,7 +185,7 @@ export default function ProjectCard({
                 boxShadow: `0px 0px 0px ${project.color}80`,
                 scale: 0.97,
               }}
-              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer"
+              className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer inline-flex items-center justify-center"
               style={{
                 background: project.color,
                 color: "#0d0d0d",

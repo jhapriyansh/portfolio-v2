@@ -7,12 +7,12 @@ export default function Footer() {
         className="w-full flex flex-col items-center gap-3"
         style={{ padding: "clamp(2rem, 4vh, 4rem) clamp(1.5rem, 6vw, 8rem)" }}
       >
-        <div className="flex items-center gap-2">
+        <div className="footer-line flex items-center gap-2">
           <div
             className="w-1.5 h-1.5 bg-[#a6ff00] rounded-full"
             style={{ animation: "dot-pulse 2.5s ease-in-out infinite" }}
           />
-          <span className="font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
+          <span className="footer-text font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
             © 2026 Priyanshu Kumar Jha · built with Next.js
           </span>
         </div>

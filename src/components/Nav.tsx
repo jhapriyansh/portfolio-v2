@@ -64,14 +64,14 @@ export default function Nav() {
         }`}
       >
         <div
-          className="w-full flex items-center justify-between"
+          className="nav-inner w-full flex items-center justify-between"
           style={{
             padding: "clamp(0.8rem, 1.5vh, 1.5rem) clamp(1.5rem, 6vw, 8rem)",
           }}
         >
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
-            <span className="text-[#a6ff00] font-['Press_Start_2P'] text-xs tracking-wider">
+          <a href="#" className="flex min-w-0 items-center gap-2 group">
+            <span className="nav-logo-name text-[#a6ff00] font-['Press_Start_2P'] text-xs tracking-wider">
               {">"} priyanshu_jha
             </span>
             <span className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px] hidden sm:inline">
@@ -107,10 +107,21 @@ export default function Nav() {
 
           {/* Mobile hamburger */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2 z-50 relative"
+            className="mobile-menu-button md:hidden flex flex-col gap-1.5 p-2 z-50 relative"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
+            style={{
+              width: 44,
+              height: 44,
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              border: "2px solid rgba(166, 255, 0, 0.45)",
+              borderRadius: "6px 2px 8px 4px",
+              background: "rgba(13, 13, 13, 0.45)",
+            }}
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -137,8 +148,14 @@ export default function Nav() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-[#0d0d0d]/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 md:hidden overflow-y-auto overscroll-contain"
-            style={{ touchAction: "none" }}
+            className="mobile-menu-panel fixed inset-0 z-40 bg-[#0d0d0d]/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 md:hidden overflow-y-auto overscroll-contain"
+            style={{
+              touchAction: "none",
+              height: "100dvh",
+              minHeight: "100dvh",
+              bottom: "auto",
+              padding: "5rem 1rem 2rem",
+            }}
           >
             {navLinks.map((link, i) => (
               <motion.a
@@ -148,9 +165,17 @@ export default function Nav() {
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="font-['Press_Start_2P'] text-sm text-[#9a9aba] hover:text-[#a6ff00] transition-colors"
+                className="mobile-menu-link font-['Press_Start_2P'] text-sm text-[#9a9aba] hover:text-[#a6ff00] transition-colors"
+                style={{
+                  display: "inline-flex",
+                  minHeight: 48,
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0 1rem",
+                  lineHeight: 1.5,
+                }}
               >
-                <span className="text-[#c77dff] mr-2">{">"}</span>
+                <span className="text-[#c77dff]">{">"}</span>
                 {link.label}
               </motion.a>
             ))}

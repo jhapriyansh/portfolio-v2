@@ -31,7 +31,7 @@ export default function Projects() {
     <section
       ref={ref}
       id="projects"
-      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      className="site-section relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
       style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -59,13 +59,13 @@ export default function Projects() {
           >
             Projects
           </h2>
-          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
+          <p className="section-kicker text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
             {"// "}quest_log.completed()
           </p>
         </motion.div>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 items-stretch"
+          className="projects-grid grid grid-cols-1 lg:grid-cols-2 items-stretch"
           style={{ gap: "clamp(1.5rem, 3vw, 3rem)" }}
         >
           {projectList.map((project, i) => (

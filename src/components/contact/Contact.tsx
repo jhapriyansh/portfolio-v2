@@ -7,14 +7,63 @@ import { PixelStar, PixelGhost, PixelCoffee } from "../sprites/PixelSprites";
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+    "idle",
+  );
 
   const email = "jhapriyanshu336@gmail.com";
 
-  function copyEmail() {
-    navigator.clipboard.writeText(email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  function fallbackCopy(text: string) {
+    const textarea = document.createElement("textarea");
+    const selection = document.getSelection();
+    const selectedRange =
+      selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "-9999px";
+    textarea.style.fontSize = "16px";
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+
+    let copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch {
+      copied = false;
+    }
+
+    document.body.removeChild(textarea);
+
+    if (selection && selectedRange) {
+      selection.removeAllRanges();
+      selection.addRange(selectedRange);
+    }
+
+    return copied;
+  }
+
+  async function copyEmail() {
+    let copied = false;
+
+    try {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } else {
+        copied = fallbackCopy(email);
+      }
+    } catch {
+      copied = fallbackCopy(email);
+    }
+
+    setCopyStatus(copied ? "copied" : "failed");
+    setTimeout(() => setCopyStatus("idle"), 2000);
   }
 
   const socialLinks = [
@@ -42,7 +91,7 @@ export default function Contact() {
     <section
       ref={ref}
       id="contact"
-      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      className="site-section relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
       style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -71,7 +120,7 @@ export default function Contact() {
             Get In Touch
           </h2>
           <p
-            className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]"
+            className="section-kicker text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]"
             style={{ marginBottom: "clamp(1.5rem, 3vh, 3rem)" }}
           >
             {"// "}send_message.connect()
@@ -83,7 +132,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="sketch-border bg-[#1a1a2e]/60 text-center w-full"
+          className="contact-card sketch-border bg-[#1a1a2e]/60 text-center w-full"
           style={{
             padding: "clamp(2.5rem, 5vw, 5rem)",
             borderColor: "#2a2a4a",
@@ -132,7 +181,7 @@ export default function Contact() {
                 transition: { duration: 0.08, delay: 0 },
               }}
               transition={{ duration: 0.12 }}
-              className="group inline-flex items-center gap-3 bg-[#0d0d0d]/60 px-6 py-4 transition-all duration-300 hover:bg-[#a6ff00]/10"
+              className="contact-email-button group inline-flex items-center gap-3 bg-[#0d0d0d]/60 px-6 py-4 transition-all duration-300 hover:bg-[#a6ff00]/10"
               style={{
                 border: "2px solid #a6ff0050",
                 borderRadius: "8px 4px 10px 5px",
@@ -142,15 +191,17 @@ export default function Contact() {
               <span className="text-[#a6ff00] font-['Press_Start_2P'] text-[8px]">
                 {">"}{" "}
               </span>
-              <span className="font-mono text-sm sm:text-base text-[#c77dff] group-hover:text-[#a6ff00] transition-colors">
+              <span className="contact-email-text font-mono text-sm sm:text-base text-[#c77dff] group-hover:text-[#a6ff00] transition-colors">
                 {email}
               </span>
               <motion.span
-                className="font-['Press_Start_2P'] text-[7px] ml-2"
-                animate={copied ? { scale: [1, 1.3, 1] } : {}}
+                className="contact-copy-hint font-['Press_Start_2P'] text-[7px] ml-2"
+                animate={copyStatus === "copied" ? { scale: [1, 1.3, 1] } : {}}
               >
-                {copied ? (
+                {copyStatus === "copied" ? (
                   <span className="text-[#a6ff00]">✓ copied!</span>
+                ) : copyStatus === "failed" ? (
+                  <span className="text-[#ff4757]">copy failed</span>
                 ) : (
                   <span className="text-[#5a5a7a] group-hover:text-[#9a9aba]">
                     [click to copy]
@@ -165,7 +216,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.7 }}
-            className="flex justify-center"
+            className="contact-socials flex flex-wrap justify-center"
             style={{ gap: "clamp(0.75rem, 2vw, 2rem)" }}
           >
             {socialLinks.map((link, i) => (
@@ -202,7 +253,7 @@ export default function Contact() {
                   boxShadow: `0px 0px 0px ${link.color}30`,
                   transition: { duration: 0.08, delay: 0 },
                 }}
-                className="font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer flex items-center gap-2"
+                className="contact-social-link font-['Press_Start_2P'] text-[10px] px-7 py-4 cursor-pointer flex items-center gap-2"
                 style={{
                   background: `${link.color}10`,
                   color: link.color,

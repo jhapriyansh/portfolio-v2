@@ -36,14 +36,14 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
       className="cursor-pointer group"
     >
       <div
-        className="transition-all duration-200 hover:bg-[#1a1a2e]/40 border-b border-[#2a2a4a]/40"
+        className="log-row transition-all duration-200 hover:bg-[#1a1a2e]/40 border-b border-[#2a2a4a]/40"
         style={{
           padding: "clamp(1.2rem, 2.5vh, 2rem) clamp(1.5rem, 3vw, 3rem)",
         }}
       >
         {/* Header row */}
         <div
-          className="flex items-start"
+          className="log-row-content flex items-start"
           style={{ gap: "clamp(0.75rem, 1.5vw, 1.5rem)" }}
         >
           <motion.span
@@ -55,14 +55,14 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
             {entry.emoji}
           </motion.span>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="log-row-titlebar flex items-center justify-between gap-3 mb-2">
               <h4
-                className="font-['Press_Start_2P'] text-[#e8e8e8] group-hover:text-[#a6ff00] transition-colors truncate leading-relaxed"
+                className="log-row-title font-['Press_Start_2P'] text-[#e8e8e8] group-hover:text-[#a6ff00] transition-colors lg:truncate leading-relaxed"
                 style={{ fontSize: "clamp(9px, 1vw, 13px)" }}
               >
                 {entry.title}
               </h4>
-              <span className="font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] shrink-0">
+              <span className="log-row-time font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] shrink-0">
                 {timeAgo(entry.createdAt)}
               </span>
             </div>
@@ -72,7 +72,7 @@ function LogRow({ entry, index }: { entry: LogEntryData; index: number }) {
               {entry.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-['Press_Start_2P'] text-[7px] px-3 py-1.5 bg-[#2a2a4a]/50 text-[#9a9aba] rounded-sm"
+                  className="log-tag font-['Press_Start_2P'] text-[7px] px-3 py-1.5 bg-[#2a2a4a]/50 text-[#9a9aba] rounded-sm"
                   style={{ borderRadius: "2px 1px 3px 2px" }}
                 >
                   {tag}
@@ -150,7 +150,7 @@ export default function Logbook() {
     <section
       ref={sectionRef}
       id="logbook"
-      className="relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
+      className="site-section relative min-h-screen flex flex-col justify-center pixel-grid noise-bg overflow-hidden"
       style={{ padding: "clamp(4rem, 8vh, 8rem) clamp(1.5rem, 6vw, 10rem)" }}
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -178,7 +178,7 @@ export default function Logbook() {
           >
             Logbook
           </h2>
-          <p className="text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
+          <p className="section-kicker text-[#5a5a7a] font-['Press_Start_2P'] text-[8px]">
             {"// "}what_ive_been_up_to.recently()
           </p>
         </motion.div>
@@ -196,14 +196,14 @@ export default function Logbook() {
           }}
         >
           {/* Terminal title bar */}
-          <div className="flex items-center gap-2 px-5 py-3 bg-[#2a2a4a]/60 border-b border-[#2a2a4a]">
+          <div className="terminal-titlebar flex items-center gap-2 px-5 py-3 bg-[#2a2a4a]/60 border-b border-[#2a2a4a]">
             <div className="w-2.5 h-2.5 rounded-full bg-[#ff4757]" />
             <div className="w-2.5 h-2.5 rounded-full bg-[#ffc857]" />
             <div className="w-2.5 h-2.5 rounded-full bg-[#a6ff00]" />
-            <span className="font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] ml-2">
+            <span className="terminal-path font-['Press_Start_2P'] text-[8px] text-[#5a5a7a] ml-2">
               ~/logbook
             </span>
-            <span className="ml-auto font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
+            <span className="terminal-count ml-auto font-['Press_Start_2P'] text-[7px] text-[#5a5a7a]">
               {loading ? "loading..." : `${total || entries.length} entries`}
             </span>
           </div>
