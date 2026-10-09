@@ -10,6 +10,9 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
+const resumeDriveLink =
+  "https://drive.google.com/file/d/1JeVfrKL_VtLY9O87wyi5j-WvdF8wIiIy/view";
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -100,7 +103,12 @@ export default function Nav() {
                 {link.label}
               </a>
             ))}
-            <a href="#resume" className="pixel-btn text-[8px] py-2 px-4">
+            <a
+              href={resumeDriveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pixel-btn text-[8px] py-2 px-4"
+            >
               Resume
             </a>
           </div>
@@ -180,7 +188,9 @@ export default function Nav() {
               </motion.a>
             ))}
             <motion.a
-              href="#resume"
+              href={resumeDriveLink}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
